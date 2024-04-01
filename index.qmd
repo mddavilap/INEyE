@@ -2,10 +2,17 @@
 title: "INEyE"
 ---
 
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+For compiling into a webpage, you need to run this in an R session:
 
 ```{r}
-1 + 1
+# Install the 'pak' package manager if you haven't already
+install.packages("pak")
+# Install 'r-shinylive' using 'pak'
+pak::pak("posit-dev/r-shinylive")
+```
+
+And in your terminal:
+
+```         
+quarto add quarto-ext/shinylive
 ```
