@@ -239,7 +239,7 @@ Los parámetros de la regresión responden a los valores necesarios para complet
 
     El rendimiento esperado se encontraría dentro del intervalo de confianza de 15.34 a 16.94.
 
-## Ejemplo 1
+## Ejemplo
 
 Un grupo de investigadores plantea que el afrontamiento centrado en el problema predice un menor estrés académico percibido por los estudiantes. Para evaluar su hipótesis tomaron una muestra de 72 jóvenes quienes respondieron a medidas de afrontamiento y estrés académico.
 
@@ -340,7 +340,7 @@ summary(m1)
 Los elementos que tenemos que evaluar en el contraste son los siguientes:
 
 | Criterio                                  | Resultado                                                                                                                                                                                |
-|------------------------------------|------------------------------------|
+|-----------------|-------------------------------------------------------|
 | Significatividad (Contraste de hipótesis) | Dado que $p_{unilateral} = .00036/2 = .00018$ se rechaza $H_0$.                                                                                                                          |
 | Sentido                                   | El coeficiente Beta no estandarizado es -.53, por lo que el sentido es **negativo**                                                                                                      |
 | Grados de Libertad                        | $N-k-1$, donde $N$ es la cantidad total de participantes y $k$ la cantidad de variables independientes (predictoras) en el modelo. De esta forma, tenemos $72-1-1=70$ grado de libertad. |

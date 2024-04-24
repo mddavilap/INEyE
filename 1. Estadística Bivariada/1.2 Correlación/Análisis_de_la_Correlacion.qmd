@@ -317,7 +317,7 @@ Un grupo de estudiantes de la Facultad de Psicología, interesados en el trabajo
 **Paso 0: cargar los datos**
 
 ```{r}
-dt <- haven::read_sav("Base - Ejercicios Correlación.sav")
+dt <- haven::read_sav("https://github.com/mddavilap/INEyE/raw/main/1.%20Estad%C3%ADstica%20Bivariada/1.2%20Correlaci%C3%B3n/Base%20-%20Ejercicios%20Correlaci%C3%B3n.sav")
 dt
 ```
 
