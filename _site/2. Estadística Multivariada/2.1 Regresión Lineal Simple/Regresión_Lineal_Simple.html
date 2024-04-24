@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Investigación No Experimental y Estadística - Análisis de Regresión Lineal Simple (RLS)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<meta name="shinylive:serviceworker_dir" content="../..">
+<script src="../../site_libs/quarto-contrib/shinylive-0.2.3/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="../../site_libs/quarto-contrib/shinylive-0.2.3/shinylive/run-python-blocks.js" type="module"></script>
+<link href="../../site_libs/quarto-contrib/shinylive-0.2.3/shinylive/shinylive.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../../site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<script src="../../site_libs/plotly-binding-4.10.3/plotly.js"></script>
+<script src="../../site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="../../site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="../../site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+<script src="../../site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="../../site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../../site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">2. Estadística Multivariada</li><li class="breadcrumb-item"><a href="../../2. Estadística Multivariada/2.1 Regresión Lineal Simple/Regresión_Lineal_Simple.html">2.1 Regresión Lineal Simple</a></li><li class="breadcrumb-item"><a href="../../2. Estadística Multivariada/2.1 Regresión Lineal Simple/Regresión_Lineal_Simple.html">Análisis de Regresión Lineal Simple (RLS)</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Investigación No Experimental y Estadística</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">1. Estadística Bivariada</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+ <span class="menu-text">1.2 Correlación</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../1. Estadística Bivariada/1.2 Correlación/Análisis_de_la_Correlacion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Análisis de correlación en la Investigación en Psicología</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">2. Estadística Multivariada</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">2.1 Regresión Lineal Simple</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../2. Estadística Multivariada/2.1 Regresión Lineal Simple/Regresión_Lineal_Simple.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Análisis de Regresión Lineal Simple (RLS)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#objetivos" id="toc-objetivos" class="nav-link active" data-scroll-target="#objetivos">Objetivos</a></li>
+  <li><a href="#definición" id="toc-definición" class="nav-link" data-scroll-target="#definición">Definición</a></li>
+  <li><a href="#clasificación" id="toc-clasificación" class="nav-link" data-scroll-target="#clasificación">Clasificación</a></li>
+  <li><a href="#variables-independientes-y-dependientes" id="toc-variables-independientes-y-dependientes" class="nav-link" data-scroll-target="#variables-independientes-y-dependientes">Variables independientes y dependientes</a></li>
+  <li><a href="#recta-de-la-regresión" id="toc-recta-de-la-regresión" class="nav-link" data-scroll-target="#recta-de-la-regresión">Recta de la regresión</a></li>
+  <li><a href="#ecuación-de-la-rls" id="toc-ecuación-de-la-rls" class="nav-link" data-scroll-target="#ecuación-de-la-rls">Ecuación de la RLS</a></li>
+  <li><a href="#actividad-1-que-significan-los-parámetros" id="toc-actividad-1-que-significan-los-parámetros" class="nav-link" data-scroll-target="#actividad-1-que-significan-los-parámetros">Actividad 1: ¿que significan los parámetros?</a></li>
+  <li><a href="#contraste-de-hipótesis-para-la-rls" id="toc-contraste-de-hipótesis-para-la-rls" class="nav-link" data-scroll-target="#contraste-de-hipótesis-para-la-rls">Contraste de hipótesis para la RLS</a></li>
+  <li><a href="#supuestos" id="toc-supuestos" class="nav-link" data-scroll-target="#supuestos">Supuestos</a></li>
+  <li><a href="#bondad-del-ajuste" id="toc-bondad-del-ajuste" class="nav-link" data-scroll-target="#bondad-del-ajuste">Bondad del Ajuste</a></li>
+  <li><a href="#estimación-de-parámetros" id="toc-estimación-de-parámetros" class="nav-link" data-scroll-target="#estimación-de-parámetros">Estimación de parámetros</a></li>
+  <li><a href="#ejemplo-1" id="toc-ejemplo-1" class="nav-link" data-scroll-target="#ejemplo-1">Ejemplo 1</a>
+  <ul class="collapse">
+  <li><a href="#paso-1.-planteamiento-del-ejercicio" id="toc-paso-1.-planteamiento-del-ejercicio" class="nav-link" data-scroll-target="#paso-1.-planteamiento-del-ejercicio">Paso 1. Planteamiento del ejercicio</a></li>
+  <li><a href="#paso-2.-evidencias-de-posible-relación" id="toc-paso-2.-evidencias-de-posible-relación" class="nav-link" data-scroll-target="#paso-2.-evidencias-de-posible-relación">Paso 2. Evidencias de posible relación</a></li>
+  <li><a href="#paso-3.-correlación-entre-variables" id="toc-paso-3.-correlación-entre-variables" class="nav-link" data-scroll-target="#paso-3.-correlación-entre-variables">Paso 3. Correlación entre variables</a></li>
+  <li><a href="#paso-4.-estimar-los-parámetros-de-la-regresión" id="toc-paso-4.-estimar-los-parámetros-de-la-regresión" class="nav-link" data-scroll-target="#paso-4.-estimar-los-parámetros-de-la-regresión">Paso 4. Estimar los parámetros de la regresión</a></li>
+  <li><a href="#paso-5.-bondad-del-ajuste" id="toc-paso-5.-bondad-del-ajuste" class="nav-link" data-scroll-target="#paso-5.-bondad-del-ajuste">Paso 5. Bondad del ajuste</a></li>
+  <li><a href="#paso-6.-contraste-de-hipótesis" id="toc-paso-6.-contraste-de-hipótesis" class="nav-link" data-scroll-target="#paso-6.-contraste-de-hipótesis">Paso 6. Contraste de Hipótesis</a></li>
+  <li><a href="#paso-7.-conclusión-final" id="toc-paso-7.-conclusión-final" class="nav-link" data-scroll-target="#paso-7.-conclusión-final">Paso 7. Conclusión final</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Análisis de Regresión Lineal Simple (RLS)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="objetivos" class="level2">
+<h2 class="anchored" data-anchor-id="objetivos">Objetivos</h2>
+<ol type="1">
+<li>Definir la regresión lineal y sus tipos</li>
+<li>Entender el concepto de variables independientes y dependientes</li>
+<li>Realizar un análisis de regresión lineal simple</li>
+</ol>
+</section>
+<section id="definición" class="level2">
+<h2 class="anchored" data-anchor-id="definición">Definición</h2>
+<p>Análisis en el que una <strong>variable</strong> <span class="math inline">\(Y\)</span> <strong>(de salida, respuesta o dependiente)</strong> se encuentra en <strong>relación de dependencia</strong> respecto a una o más <strong>variables predictoras</strong> <span class="math inline">\(X_1, X_2, … X_p\)</span> <strong>(explicativas o independientes).</strong> Es importante tener en cuenta que variaciones o cambios en la Y derivan de las variaciones en otras variables <span class="math inline">\(X_1, X_2,... X_p\)</span></p>
+</section>
+<section id="clasificación" class="level2">
+<h2 class="anchored" data-anchor-id="clasificación">Clasificación</h2>
+<ul>
+<li><p>Según la cantidad de variables:</p>
+<ul>
+<li><p>Simple: Solo 1 variable predictora o independiente <span class="math inline">\(X\)</span></p></li>
+<li><p>Múltiple: Más de una variable predictora <span class="math inline">\(X_1, X_2, … X_p\)</span></p></li>
+</ul></li>
+<li><p>Según el tipo de relación:</p>
+<ul>
+<li><p>Lineales</p></li>
+<li><p>No lineales</p></li>
+<li><p>No lineales en Y (logísticas)</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="variables-independientes-y-dependientes" class="level2">
+<h2 class="anchored" data-anchor-id="variables-independientes-y-dependientes">Variables independientes y dependientes</h2>
+<p>Existen varias similitudes entre la correlación y la regresión lineal simple, en tanto ambas buscan establecer relaciones lineales entre dos variables. Sin embargo, hay importantes diferencias que se deben de tener en cuenta:</p>
+<ol type="1">
+<li>A diferencia de la correlación, que solo establece una asociación entre dos variables, la regresión propone la noción de <strong>predicción</strong>. Esta es la diferencia mas importante, dado que los resultados de una variable <span class="math inline">\(X\)</span> (independiente) se usan para predecir los resultados de una variable <span class="math inline">\(Y\)</span> (dependiente).</li>
+<li>Así, la regresión establece una <strong>direccionalidad</strong>. En el lenguaje de la correlación, entendíamos como equivalente decir “a mas ansiedad hay mas depresión” o “a mas depresión hay mas ansiedad”. Sin embargo, en la regresión, dado que las variables se ordenan como independientes o dependiente, solo podemos establecer una sola vía de interpretación. Por ejemplo, si decimos que la ansiedad predice menores niveles de bienestar, <strong>NO es posible indicar que menores niveles de bienestar predicen mayor ansiedad.</strong></li>
+</ol>
+<p>Es común que al estudiar la relación entre dos variables, se piense en la noción de causa y efecto. La variable considerada causa, se le denomina “variable independiente” y la considerada efecto se denomina “variable dependiente”.</p>
+<p>Sin embargo, en la investigación no experimental no es posible afirmar una relación causal, dado que el procedimiento de recojo de información no facilita una inferencia causal sobre las variables. Piensen en lo siguiente, si encuesto a las personas sobre ansiedad y bienestar a la vez, ¿puedo decir que la ansiedad va a impactar al bienestar?</p>
+<p>Sin embargo, el análisis de la regresión lineal nos permite establecer relaciones de predicción, donde podemos evaluar si las variaciones en una variable independiente <span class="math inline">\(X\)</span> predicen las variaciones que observaremos en una variable dependiente <span class="math inline">\(Y\)</span></p>
+</section>
+<section id="recta-de-la-regresión" class="level2">
+<h2 class="anchored" data-anchor-id="recta-de-la-regresión">Recta de la regresión</h2>
+<p>Un modelo de predicción, ecuación matemática que establece la relación de dependiente, puede visualizarse como una recta en un gráfico, en el que el eje horizontal (X) y el eje vertical representan los valores predichos de la variable dependiente (Y).</p>
+<p>La recta a la que nos referimos se llama recta de regresión y lo hemos visto en los gráficos de dispersión de la clase de correlación.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-909c2ee182d610c08d10" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-909c2ee182d610c08d10">{"x":{"data":[{"x":[8,21,73,85,78,33,8,28,23,38,37,21,75,82,59,65,84,45,71,29,17,72,90,44,83,70,95,64,7,25,97,21,95,50,65,94,98,91,93,52,31,42,4,12,7,7,58,54,48,92,87,79,32,42,37,89,93,61,13,25,29,40,27,62,2,32,61,41,56,53,96,84,25,7,44,0,33,37,48,60,48,54,65,94,40,82,53,44,98,83,54,79,54,99,77,79,11,38,65,70],"y":[44,62,125,140,129,92,48,105,81,94,36,48,110,137,100,138,152,59,100,59,61,110,92,116,120,115,128,87,35,75,111,59,171,94,119,147,104,146,132,90,67,72,80,89,41,55,115,106,113,125,126,135,75,87,47,148,102,91,54,78,59,81,50,105,68,97,119,109,69,73,126,109,88,62,112,27,83,56,97,108,91,119,95,114,58,99,53,78,117,117,79,114,123,161,93,132,90,54,130,91],"text":["Ansiedad:  8<br />Depresión:  44","Ansiedad: 21<br />Depresión:  62","Ansiedad: 73<br />Depresión: 125","Ansiedad: 85<br />Depresión: 140","Ansiedad: 78<br />Depresión: 129","Ansiedad: 33<br />Depresión:  92","Ansiedad:  8<br />Depresión:  48","Ansiedad: 28<br />Depresión: 105","Ansiedad: 23<br />Depresión:  81","Ansiedad: 38<br />Depresión:  94","Ansiedad: 37<br />Depresión:  36","Ansiedad: 21<br />Depresión:  48","Ansiedad: 75<br />Depresión: 110","Ansiedad: 82<br />Depresión: 137","Ansiedad: 59<br />Depresión: 100","Ansiedad: 65<br />Depresión: 138","Ansiedad: 84<br />Depresión: 152","Ansiedad: 45<br />Depresión:  59","Ansiedad: 71<br />Depresión: 100","Ansiedad: 29<br />Depresión:  59","Ansiedad: 17<br />Depresión:  61","Ansiedad: 72<br />Depresión: 110","Ansiedad: 90<br />Depresión:  92","Ansiedad: 44<br />Depresión: 116","Ansiedad: 83<br />Depresión: 120","Ansiedad: 70<br />Depresión: 115","Ansiedad: 95<br />Depresión: 128","Ansiedad: 64<br />Depresión:  87","Ansiedad:  7<br />Depresión:  35","Ansiedad: 25<br />Depresión:  75","Ansiedad: 97<br />Depresión: 111","Ansiedad: 21<br />Depresión:  59","Ansiedad: 95<br />Depresión: 171","Ansiedad: 50<br />Depresión:  94","Ansiedad: 65<br />Depresión: 119","Ansiedad: 94<br />Depresión: 147","Ansiedad: 98<br />Depresión: 104","Ansiedad: 91<br />Depresión: 146","Ansiedad: 93<br />Depresión: 132","Ansiedad: 52<br />Depresión:  90","Ansiedad: 31<br />Depresión:  67","Ansiedad: 42<br />Depresión:  72","Ansiedad:  4<br />Depresión:  80","Ansiedad: 12<br />Depresión:  89","Ansiedad:  7<br />Depresión:  41","Ansiedad:  7<br />Depresión:  55","Ansiedad: 58<br />Depresión: 115","Ansiedad: 54<br />Depresión: 106","Ansiedad: 48<br />Depresión: 113","Ansiedad: 92<br />Depresión: 125","Ansiedad: 87<br />Depresión: 126","Ansiedad: 79<br />Depresión: 135","Ansiedad: 32<br />Depresión:  75","Ansiedad: 42<br />Depresión:  87","Ansiedad: 37<br />Depresión:  47","Ansiedad: 89<br />Depresión: 148","Ansiedad: 93<br />Depresión: 102","Ansiedad: 61<br />Depresión:  91","Ansiedad: 13<br />Depresión:  54","Ansiedad: 25<br />Depresión:  78","Ansiedad: 29<br />Depresión:  59","Ansiedad: 40<br />Depresión:  81","Ansiedad: 27<br />Depresión:  50","Ansiedad: 62<br />Depresión: 105","Ansiedad:  2<br />Depresión:  68","Ansiedad: 32<br />Depresión:  97","Ansiedad: 61<br />Depresión: 119","Ansiedad: 41<br />Depresión: 109","Ansiedad: 56<br />Depresión:  69","Ansiedad: 53<br />Depresión:  73","Ansiedad: 96<br />Depresión: 126","Ansiedad: 84<br />Depresión: 109","Ansiedad: 25<br />Depresión:  88","Ansiedad:  7<br />Depresión:  62","Ansiedad: 44<br />Depresión: 112","Ansiedad:  0<br />Depresión:  27","Ansiedad: 33<br />Depresión:  83","Ansiedad: 37<br />Depresión:  56","Ansiedad: 48<br />Depresión:  97","Ansiedad: 60<br />Depresión: 108","Ansiedad: 48<br />Depresión:  91","Ansiedad: 54<br />Depresión: 119","Ansiedad: 65<br />Depresión:  95","Ansiedad: 94<br />Depresión: 114","Ansiedad: 40<br />Depresión:  58","Ansiedad: 82<br />Depresión:  99","Ansiedad: 53<br />Depresión:  53","Ansiedad: 44<br />Depresión:  78","Ansiedad: 98<br />Depresión: 117","Ansiedad: 83<br />Depresión: 117","Ansiedad: 54<br />Depresión:  79","Ansiedad: 79<br />Depresión: 114","Ansiedad: 54<br />Depresión: 123","Ansiedad: 99<br />Depresión: 161","Ansiedad: 77<br />Depresión:  93","Ansiedad: 79<br />Depresión: 132","Ansiedad: 11<br />Depresión:  90","Ansiedad: 38<br />Depresión:  54","Ansiedad: 65<br />Depresión: 130","Ansiedad: 70<br />Depresión:  91"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,0,0,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,1.2531645569620253,2.5063291139240507,3.759493670886076,5.0126582278481013,6.2658227848101262,7.518987341772152,8.7721518987341778,10.025316455696203,11.278481012658228,12.531645569620252,13.784810126582279,15.037974683544304,16.291139240506329,17.544303797468356,18.797468354430379,20.050632911392405,21.303797468354432,22.556962025316455,23.810126582278482,25.063291139240505,26.316455696202532,27.569620253164558,28.822784810126581,30.075949367088608,31.329113924050635,32.582278481012658,33.835443037974684,35.088607594936711,36.341772151898738,37.594936708860757,38.848101265822784,40.101265822784811,41.354430379746837,42.607594936708864,43.860759493670884,45.11392405063291,46.367088607594937,47.620253164556964,48.87341772151899,50.12658227848101,51.379746835443036,52.632911392405063,53.88607594936709,55.139240506329116,56.392405063291143,57.645569620253163,58.898734177215189,60.151898734177216,61.405063291139243,62.658227848101269,63.911392405063289,65.164556962025316,66.417721518987349,67.670886075949369,68.924050632911388,70.177215189873422,71.430379746835442,72.683544303797476,73.936708860759495,75.189873417721515,76.443037974683548,77.696202531645568,78.949367088607602,80.202531645569621,81.455696202531641,82.708860759493675,83.962025316455694,85.215189873417728,86.468354430379748,87.721518987341767,88.974683544303801,90.22784810126582,91.481012658227854,92.734177215189874,93.987341772151893,95.240506329113927,96.493670886075947,97.74683544303798,99],"y":[48.219702049217275,49.317022608701791,50.414343168186299,51.511663727670815,52.60898428715533,53.706304846639839,54.803625406124354,55.900945965608869,56.998266525093385,58.095587084577893,59.192907644062409,60.290228203546924,61.387548763031432,62.484869322515948,63.582189882000463,64.679510441484979,65.77683100096948,66.87415156045401,67.971472119938511,69.068792679423026,70.166113238907542,71.263433798392057,72.360754357876573,73.458074917361074,74.55539547684559,75.652716036330105,76.75003659581462,77.847357155299136,78.944677714783651,80.041998274268167,81.139318833752668,82.236639393237184,83.333959952721699,84.431280512206214,85.52860107169073,86.625921631175231,87.723242190659761,88.820562750144262,89.917883309628792,91.015203869113293,92.112524428597794,93.209844988082324,94.307165547566825,95.404486107051355,96.501806666535856,97.599127226020386,98.696447785504887,99.793768344989402,100.89108890447392,101.98840946395842,103.08573002344295,104.18305058292745,105.28037114241197,106.37769170189648,107.475012261381,108.57233282086551,109.66965338035001,110.76697393983453,111.86429449931904,112.96161505880356,114.05893561828807,115.15625617777259,116.25357673725709,117.35089729674162,118.44821785622612,119.54553841571064,120.64285897519515,121.74017953467967,122.83750009416418,123.9348206536487,125.0321412131332,126.12946177261772,127.22678233210223,128.32410289158673,129.42142345107126,130.51874401055576,131.61606457004029,132.7133851295248,133.8107056890093,134.90802624849383],"text":["Ansiedad:  0.000000<br />Depresión:  48.21970","Ansiedad:  1.253165<br />Depresión:  49.31702","Ansiedad:  2.506329<br />Depresión:  50.41434","Ansiedad:  3.759494<br />Depresión:  51.51166","Ansiedad:  5.012658<br />Depresión:  52.60898","Ansiedad:  6.265823<br />Depresión:  53.70630","Ansiedad:  7.518987<br />Depresión:  54.80363","Ansiedad:  8.772152<br />Depresión:  55.90095","Ansiedad: 10.025316<br />Depresión:  56.99827","Ansiedad: 11.278481<br />Depresión:  58.09559","Ansiedad: 12.531646<br />Depresión:  59.19291","Ansiedad: 13.784810<br />Depresión:  60.29023","Ansiedad: 15.037975<br />Depresión:  61.38755","Ansiedad: 16.291139<br />Depresión:  62.48487","Ansiedad: 17.544304<br />Depresión:  63.58219","Ansiedad: 18.797468<br />Depresión:  64.67951","Ansiedad: 20.050633<br />Depresión:  65.77683","Ansiedad: 21.303797<br />Depresión:  66.87415","Ansiedad: 22.556962<br />Depresión:  67.97147","Ansiedad: 23.810127<br />Depresión:  69.06879","Ansiedad: 25.063291<br />Depresión:  70.16611","Ansiedad: 26.316456<br />Depresión:  71.26343","Ansiedad: 27.569620<br />Depresión:  72.36075","Ansiedad: 28.822785<br />Depresión:  73.45807","Ansiedad: 30.075949<br />Depresión:  74.55540","Ansiedad: 31.329114<br />Depresión:  75.65272","Ansiedad: 32.582278<br />Depresión:  76.75004","Ansiedad: 33.835443<br />Depresión:  77.84736","Ansiedad: 35.088608<br />Depresión:  78.94468","Ansiedad: 36.341772<br />Depresión:  80.04200","Ansiedad: 37.594937<br />Depresión:  81.13932","Ansiedad: 38.848101<br />Depresión:  82.23664","Ansiedad: 40.101266<br />Depresión:  83.33396","Ansiedad: 41.354430<br />Depresión:  84.43128","Ansiedad: 42.607595<br />Depresión:  85.52860","Ansiedad: 43.860759<br />Depresión:  86.62592","Ansiedad: 45.113924<br />Depresión:  87.72324","Ansiedad: 46.367089<br />Depresión:  88.82056","Ansiedad: 47.620253<br />Depresión:  89.91788","Ansiedad: 48.873418<br />Depresión:  91.01520","Ansiedad: 50.126582<br />Depresión:  92.11252","Ansiedad: 51.379747<br />Depresión:  93.20984","Ansiedad: 52.632911<br />Depresión:  94.30717","Ansiedad: 53.886076<br />Depresión:  95.40449","Ansiedad: 55.139241<br />Depresión:  96.50181","Ansiedad: 56.392405<br />Depresión:  97.59913","Ansiedad: 57.645570<br />Depresión:  98.69645","Ansiedad: 58.898734<br />Depresión:  99.79377","Ansiedad: 60.151899<br />Depresión: 100.89109","Ansiedad: 61.405063<br />Depresión: 101.98841","Ansiedad: 62.658228<br />Depresión: 103.08573","Ansiedad: 63.911392<br />Depresión: 104.18305","Ansiedad: 65.164557<br />Depresión: 105.28037","Ansiedad: 66.417722<br />Depresión: 106.37769","Ansiedad: 67.670886<br />Depresión: 107.47501","Ansiedad: 68.924051<br />Depresión: 108.57233","Ansiedad: 70.177215<br />Depresión: 109.66965","Ansiedad: 71.430380<br />Depresión: 110.76697","Ansiedad: 72.683544<br />Depresión: 111.86429","Ansiedad: 73.936709<br />Depresión: 112.96162","Ansiedad: 75.189873<br />Depresión: 114.05894","Ansiedad: 76.443038<br />Depresión: 115.15626","Ansiedad: 77.696203<br />Depresión: 116.25358","Ansiedad: 78.949367<br />Depresión: 117.35090","Ansiedad: 80.202532<br />Depresión: 118.44822","Ansiedad: 81.455696<br />Depresión: 119.54554","Ansiedad: 82.708861<br />Depresión: 120.64286","Ansiedad: 83.962025<br />Depresión: 121.74018","Ansiedad: 85.215190<br />Depresión: 122.83750","Ansiedad: 86.468354<br />Depresión: 123.93482","Ansiedad: 87.721519<br />Depresión: 125.03214","Ansiedad: 88.974684<br />Depresión: 126.12946","Ansiedad: 90.227848<br />Depresión: 127.22678","Ansiedad: 91.481013<br />Depresión: 128.32410","Ansiedad: 92.734177<br />Depresión: 129.42142","Ansiedad: 93.987342<br />Depresión: 130.51874","Ansiedad: 95.240506<br />Depresión: 131.61606","Ansiedad: 96.493671<br />Depresión: 132.71339","Ansiedad: 97.746835<br />Depresión: 133.81071","Ansiedad: 99.000000<br />Depresión: 134.90803"],"type":"scatter","mode":"lines","name":"fitted values","line":{"width":3.7795275590551185,"color":"rgba(51,102,255,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,1.2531645569620253,2.5063291139240507,3.759493670886076,5.0126582278481013,6.2658227848101262,7.518987341772152,8.7721518987341778,10.025316455696203,11.278481012658228,12.531645569620252,13.784810126582279,15.037974683544304,16.291139240506329,17.544303797468356,18.797468354430379,20.050632911392405,21.303797468354432,22.556962025316455,23.810126582278482,25.063291139240505,26.316455696202532,27.569620253164558,28.822784810126581,30.075949367088608,31.329113924050635,32.582278481012658,33.835443037974684,35.088607594936711,36.341772151898738,37.594936708860757,38.848101265822784,40.101265822784811,41.354430379746837,42.607594936708864,43.860759493670884,45.11392405063291,46.367088607594937,47.620253164556964,48.87341772151899,50.12658227848101,51.379746835443036,52.632911392405063,53.88607594936709,55.139240506329116,56.392405063291143,57.645569620253163,58.898734177215189,60.151898734177216,61.405063291139243,62.658227848101269,63.911392405063289,65.164556962025316,66.417721518987349,67.670886075949369,68.924050632911388,70.177215189873422,71.430379746835442,72.683544303797476,73.936708860759495,75.189873417721515,76.443037974683548,77.696202531645568,78.949367088607602,80.202531645569621,81.455696202531641,82.708860759493675,83.962025316455694,85.215189873417728,86.468354430379748,87.721518987341767,88.974683544303801,90.22784810126582,91.481012658227854,92.734177215189874,93.987341772151893,95.240506329113927,96.493670886075947,97.74683544303798,99,99,99,97.74683544303798,96.493670886075947,95.240506329113927,93.987341772151893,92.734177215189874,91.481012658227854,90.22784810126582,88.974683544303801,87.721518987341767,86.468354430379748,85.215189873417728,83.962025316455694,82.708860759493675,81.455696202531641,80.202531645569621,78.949367088607602,77.696202531645568,76.443037974683548,75.189873417721515,73.936708860759495,72.683544303797476,71.430379746835442,70.177215189873422,68.924050632911388,67.670886075949369,66.417721518987349,65.164556962025316,63.911392405063289,62.658227848101269,61.405063291139243,60.151898734177216,58.898734177215189,57.645569620253163,56.392405063291143,55.139240506329116,53.88607594936709,52.632911392405063,51.379746835443036,50.12658227848101,48.87341772151899,47.620253164556964,46.367088607594937,45.11392405063291,43.860759493670884,42.607594936708864,41.354430379746837,40.101265822784811,38.848101265822784,37.594936708860757,36.341772151898738,35.088607594936711,33.835443037974684,32.582278481012658,31.329113924050635,30.075949367088608,28.822784810126581,27.569620253164558,26.316455696202532,25.063291139240505,23.810126582278482,22.556962025316455,21.303797468354432,20.050632911392405,18.797468354430379,17.544303797468356,16.291139240506329,15.037974683544304,13.784810126582279,12.531645569620252,11.278481012658228,10.025316455696203,8.7721518987341778,7.518987341772152,6.2658227848101262,5.0126582278481013,3.759493670886076,2.5063291139240507,1.2531645569620253,0,0],"y":[40.08250918406376,41.328992194806844,42.574658691690438,43.81946143458179,45.06334977614884,46.306269383300865,47.548161935556053,48.788964798878901,50.028610673604959,51.267027215209673,52.504136626902408,53.739855223361182,54.974092965398661,56.206752966002185,57.437730969064667,58.666914803270075,59.894183815076047,61.119408286613449,62.342448846668042,63.563155885797578,64.781368990132279,65.996916412565966,67.209614604890547,68.419267839939707,69.625667958894468,70.828594285367373,72.027813754389925,73.22308131046367,74.414140633677405,75.600725255580528,76.782560125852825,77.95936368546549,79.130850490571007,80.296734412518632,81.456732412321045,82.610568852530903,83.757980266918722,84.898720461134076,86.032565769843799,87.159320253241631,88.278820584737616,89.390940368325062,90.495593633477753,91.592737289666331,92.682372380349747,93.764544052421726,94.839340243175755,95.906889172692857,96.967355804979576,98.020937497933147,99.067859095274684,100.10836772180352,101.14272752905558,102.17121460667121,103.19411223180134,104.21170658109794,105.22428298276354,106.23212274386115,107.23550055309522,108.23468243259978,109.2299241938001,110.22147034127521,111.20955336345624,112.19439334853236,113.17619786674956,114.15516206520623,115.13146892732081,116.10528965566395,117.07678414329894,118.04610150483823,119.01338064390674,119.97875083851606,120.94233232998,121.90423690446792,122.86456845915251,123.82342354722996,124.78089189794906,125.73705690924513,126.69199611171001,127.64578160348985,127.64578160348985,142.17027089349779,140.92941526630858,139.68971334980446,138.45123724213153,137.21406447388156,135.97827844299002,134.74396887870554,133.51123233422447,132.28017270671936,131.05090178235966,129.82353980245918,128.59821604502943,127.37506941369539,126.1542490230695,124.93591476621505,123.72023784570268,122.50740124495088,121.29760011105795,120.09104201426997,118.88794704277605,117.68854768500734,116.49308844554287,115.3018251358079,114.11502377793649,112.93295906063308,111.75591229096065,110.58416879712175,109.41801475576835,108.25773344405138,107.10360095161121,105.95588142998369,104.81482200396826,103.68064751728595,102.55355532783402,101.43371039961905,100.32124095272196,99.216234924436378,98.118737461655897,97.028749607839586,95.946228272457972,94.871087484984955,93.803200849413784,92.742405039154448,91.6885041144008,90.641274409819559,89.600469731060414,88.565826611893797,87.537069414872391,86.513915101008877,85.496077541652511,84.483271292955806,83.475214795889897,82.471633000134602,81.472259437239316,80.476837787292837,79.485122994796711,78.496881994782441,77.511894110862599,76.529951184218149,75.550857487682805,74.574429473048468,73.600495393208988,72.62889483429457,71.659478186862913,70.692106079699883,69.726648794936267,68.762985679029711,67.801004560664211,66.840601183732659,65.881678661222409,64.924146953946106,63.967922376581811,63.012927132338838,62.059088876692655,61.106340309978812,60.15461879816182,59.20386602075984,58.254027644682161,57.305053022596738,56.356894914370791,40.08250918406376],"text":["Ansiedad:  0.000000<br />Depresión:  48.21970","Ansiedad:  1.253165<br />Depresión:  49.31702","Ansiedad:  2.506329<br />Depresión:  50.41434","Ansiedad:  3.759494<br />Depresión:  51.51166","Ansiedad:  5.012658<br />Depresión:  52.60898","Ansiedad:  6.265823<br />Depresión:  53.70630","Ansiedad:  7.518987<br />Depresión:  54.80363","Ansiedad:  8.772152<br />Depresión:  55.90095","Ansiedad: 10.025316<br />Depresión:  56.99827","Ansiedad: 11.278481<br />Depresión:  58.09559","Ansiedad: 12.531646<br />Depresión:  59.19291","Ansiedad: 13.784810<br />Depresión:  60.29023","Ansiedad: 15.037975<br />Depresión:  61.38755","Ansiedad: 16.291139<br />Depresión:  62.48487","Ansiedad: 17.544304<br />Depresión:  63.58219","Ansiedad: 18.797468<br />Depresión:  64.67951","Ansiedad: 20.050633<br />Depresión:  65.77683","Ansiedad: 21.303797<br />Depresión:  66.87415","Ansiedad: 22.556962<br />Depresión:  67.97147","Ansiedad: 23.810127<br />Depresión:  69.06879","Ansiedad: 25.063291<br />Depresión:  70.16611","Ansiedad: 26.316456<br />Depresión:  71.26343","Ansiedad: 27.569620<br />Depresión:  72.36075","Ansiedad: 28.822785<br />Depresión:  73.45807","Ansiedad: 30.075949<br />Depresión:  74.55540","Ansiedad: 31.329114<br />Depresión:  75.65272","Ansiedad: 32.582278<br />Depresión:  76.75004","Ansiedad: 33.835443<br />Depresión:  77.84736","Ansiedad: 35.088608<br />Depresión:  78.94468","Ansiedad: 36.341772<br />Depresión:  80.04200","Ansiedad: 37.594937<br />Depresión:  81.13932","Ansiedad: 38.848101<br />Depresión:  82.23664","Ansiedad: 40.101266<br />Depresión:  83.33396","Ansiedad: 41.354430<br />Depresión:  84.43128","Ansiedad: 42.607595<br />Depresión:  85.52860","Ansiedad: 43.860759<br />Depresión:  86.62592","Ansiedad: 45.113924<br />Depresión:  87.72324","Ansiedad: 46.367089<br />Depresión:  88.82056","Ansiedad: 47.620253<br />Depresión:  89.91788","Ansiedad: 48.873418<br />Depresión:  91.01520","Ansiedad: 50.126582<br />Depresión:  92.11252","Ansiedad: 51.379747<br />Depresión:  93.20984","Ansiedad: 52.632911<br />Depresión:  94.30717","Ansiedad: 53.886076<br />Depresión:  95.40449","Ansiedad: 55.139241<br />Depresión:  96.50181","Ansiedad: 56.392405<br />Depresión:  97.59913","Ansiedad: 57.645570<br />Depresión:  98.69645","Ansiedad: 58.898734<br />Depresión:  99.79377","Ansiedad: 60.151899<br />Depresión: 100.89109","Ansiedad: 61.405063<br />Depresión: 101.98841","Ansiedad: 62.658228<br />Depresión: 103.08573","Ansiedad: 63.911392<br />Depresión: 104.18305","Ansiedad: 65.164557<br />Depresión: 105.28037","Ansiedad: 66.417722<br />Depresión: 106.37769","Ansiedad: 67.670886<br />Depresión: 107.47501","Ansiedad: 68.924051<br />Depresión: 108.57233","Ansiedad: 70.177215<br />Depresión: 109.66965","Ansiedad: 71.430380<br />Depresión: 110.76697","Ansiedad: 72.683544<br />Depresión: 111.86429","Ansiedad: 73.936709<br />Depresión: 112.96162","Ansiedad: 75.189873<br />Depresión: 114.05894","Ansiedad: 76.443038<br />Depresión: 115.15626","Ansiedad: 77.696203<br />Depresión: 116.25358","Ansiedad: 78.949367<br />Depresión: 117.35090","Ansiedad: 80.202532<br />Depresión: 118.44822","Ansiedad: 81.455696<br />Depresión: 119.54554","Ansiedad: 82.708861<br />Depresión: 120.64286","Ansiedad: 83.962025<br />Depresión: 121.74018","Ansiedad: 85.215190<br />Depresión: 122.83750","Ansiedad: 86.468354<br />Depresión: 123.93482","Ansiedad: 87.721519<br />Depresión: 125.03214","Ansiedad: 88.974684<br />Depresión: 126.12946","Ansiedad: 90.227848<br />Depresión: 127.22678","Ansiedad: 91.481013<br />Depresión: 128.32410","Ansiedad: 92.734177<br />Depresión: 129.42142","Ansiedad: 93.987342<br />Depresión: 130.51874","Ansiedad: 95.240506<br />Depresión: 131.61606","Ansiedad: 96.493671<br />Depresión: 132.71339","Ansiedad: 97.746835<br />Depresión: 133.81071","Ansiedad: 99.000000<br />Depresión: 134.90803","Ansiedad: 99.000000<br />Depresión: 134.90803","Ansiedad: 99.000000<br />Depresión: 134.90803","Ansiedad: 97.746835<br />Depresión: 133.81071","Ansiedad: 96.493671<br />Depresión: 132.71339","Ansiedad: 95.240506<br />Depresión: 131.61606","Ansiedad: 93.987342<br />Depresión: 130.51874","Ansiedad: 92.734177<br />Depresión: 129.42142","Ansiedad: 91.481013<br />Depresión: 128.32410","Ansiedad: 90.227848<br />Depresión: 127.22678","Ansiedad: 88.974684<br />Depresión: 126.12946","Ansiedad: 87.721519<br />Depresión: 125.03214","Ansiedad: 86.468354<br />Depresión: 123.93482","Ansiedad: 85.215190<br />Depresión: 122.83750","Ansiedad: 83.962025<br />Depresión: 121.74018","Ansiedad: 82.708861<br />Depresión: 120.64286","Ansiedad: 81.455696<br />Depresión: 119.54554","Ansiedad: 80.202532<br />Depresión: 118.44822","Ansiedad: 78.949367<br />Depresión: 117.35090","Ansiedad: 77.696203<br />Depresión: 116.25358","Ansiedad: 76.443038<br />Depresión: 115.15626","Ansiedad: 75.189873<br />Depresión: 114.05894","Ansiedad: 73.936709<br />Depresión: 112.96162","Ansiedad: 72.683544<br />Depresión: 111.86429","Ansiedad: 71.430380<br />Depresión: 110.76697","Ansiedad: 70.177215<br />Depresión: 109.66965","Ansiedad: 68.924051<br />Depresión: 108.57233","Ansiedad: 67.670886<br />Depresión: 107.47501","Ansiedad: 66.417722<br />Depresión: 106.37769","Ansiedad: 65.164557<br />Depresión: 105.28037","Ansiedad: 63.911392<br />Depresión: 104.18305","Ansiedad: 62.658228<br />Depresión: 103.08573","Ansiedad: 61.405063<br />Depresión: 101.98841","Ansiedad: 60.151899<br />Depresión: 100.89109","Ansiedad: 58.898734<br />Depresión:  99.79377","Ansiedad: 57.645570<br />Depresión:  98.69645","Ansiedad: 56.392405<br />Depresión:  97.59913","Ansiedad: 55.139241<br />Depresión:  96.50181","Ansiedad: 53.886076<br />Depresión:  95.40449","Ansiedad: 52.632911<br />Depresión:  94.30717","Ansiedad: 51.379747<br />Depresión:  93.20984","Ansiedad: 50.126582<br />Depresión:  92.11252","Ansiedad: 48.873418<br />Depresión:  91.01520","Ansiedad: 47.620253<br />Depresión:  89.91788","Ansiedad: 46.367089<br />Depresión:  88.82056","Ansiedad: 45.113924<br />Depresión:  87.72324","Ansiedad: 43.860759<br />Depresión:  86.62592","Ansiedad: 42.607595<br />Depresión:  85.52860","Ansiedad: 41.354430<br />Depresión:  84.43128","Ansiedad: 40.101266<br />Depresión:  83.33396","Ansiedad: 38.848101<br />Depresión:  82.23664","Ansiedad: 37.594937<br />Depresión:  81.13932","Ansiedad: 36.341772<br />Depresión:  80.04200","Ansiedad: 35.088608<br />Depresión:  78.94468","Ansiedad: 33.835443<br />Depresión:  77.84736","Ansiedad: 32.582278<br />Depresión:  76.75004","Ansiedad: 31.329114<br />Depresión:  75.65272","Ansiedad: 30.075949<br />Depresión:  74.55540","Ansiedad: 28.822785<br />Depresión:  73.45807","Ansiedad: 27.569620<br />Depresión:  72.36075","Ansiedad: 26.316456<br />Depresión:  71.26343","Ansiedad: 25.063291<br />Depresión:  70.16611","Ansiedad: 23.810127<br />Depresión:  69.06879","Ansiedad: 22.556962<br />Depresión:  67.97147","Ansiedad: 21.303797<br />Depresión:  66.87415","Ansiedad: 20.050633<br />Depresión:  65.77683","Ansiedad: 18.797468<br />Depresión:  64.67951","Ansiedad: 17.544304<br />Depresión:  63.58219","Ansiedad: 16.291139<br />Depresión:  62.48487","Ansiedad: 15.037975<br />Depresión:  61.38755","Ansiedad: 13.784810<br />Depresión:  60.29023","Ansiedad: 12.531646<br />Depresión:  59.19291","Ansiedad: 11.278481<br />Depresión:  58.09559","Ansiedad: 10.025316<br />Depresión:  56.99827","Ansiedad:  8.772152<br />Depresión:  55.90095","Ansiedad:  7.518987<br />Depresión:  54.80363","Ansiedad:  6.265823<br />Depresión:  53.70630","Ansiedad:  5.012658<br />Depresión:  52.60898","Ansiedad:  3.759494<br />Depresión:  51.51166","Ansiedad:  2.506329<br />Depresión:  50.41434","Ansiedad:  1.253165<br />Depresión:  49.31702","Ansiedad:  0.000000<br />Depresión:  48.21970","Ansiedad:  0.000000<br />Depresión:  48.21970"],"type":"scatter","mode":"lines","line":{"width":3.7795275590551185,"color":"transparent","dash":"solid"},"fill":"toself","fillcolor":"rgba(153,153,153,0.4)","hoveron":"points","hoverinfo":"x+y","showlegend":false,"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826491,"l":43.105022831050235},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Relación Lineal","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-4.9500000000000002,103.95],"tickmode":"array","ticktext":["0","25","50","75","100"],"tickvals":[0,25,50,75,100],"categoryorder":"array","categoryarray":["0","25","50","75","100"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Ansiedad","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f","showspikes":true},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[19.800000000000001,178.19999999999999],"tickmode":"array","ticktext":["50","100","150"],"tickvals":[50,100,150],"categoryorder":"array","categoryarray":["50","100","150"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Depresión","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f","showspikes":true},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"1af84bbb5479":{"x":{},"y":{},"type":"scatter"},"1af817e86993":{"x":{},"y":{}}},"cur_data":"1af84bbb5479","visdat":{"1af84bbb5479":["function (y) ","x"],"1af817e86993":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="ecuación-de-la-rls" class="level2">
+<h2 class="anchored" data-anchor-id="ecuación-de-la-rls">Ecuación de la RLS</h2>
+<p><span class="math display">\[
+Y = \alpha + \beta_1X_1 \pm \epsilon
+\]</span></p>
+<p>En donde:</p>
+<ul>
+<li><p><span class="math inline">\(Y\)</span> es la variable a predecir</p></li>
+<li><p><span class="math inline">\(X_1\)</span> la variable predictora</p></li>
+<li><p><span class="math inline">\(\alpha\)</span> (llamado también <span class="math inline">\(\beta_0\)</span>) y <span class="math inline">\(\beta_1\)</span> son parámetros desconocidos a estimar</p></li>
+<li><p><span class="math inline">\(\epsilon\)</span> es el error que se comete en la predicción de los parámetros (error del modelo)</p></li>
+</ul>
+</section>
+<section id="actividad-1-que-significan-los-parámetros" class="level2">
+<h2 class="anchored" data-anchor-id="actividad-1-que-significan-los-parámetros">Actividad 1: ¿que significan los parámetros?</h2>
+<p>En la clase anterior, la recta del gráfico era estimada automáticamente para su visualización. Sin embargo, a fin identificar la función de cada uno de los parámetros de la regresión lineal simple vamos a ver un gráfico donde podrás cambiar libremente valores de <span class="math inline">\(\alpha\)</span> y <span class="math inline">\(\beta_1\)</span>. Así, te pedimos que puedas contestar las siguientes preguntas:</p>
+<ol type="1">
+<li>¿Que sucede cuando modificamos el valor del <span class="math inline">\(\alpha\)</span> sin mover el valor del <span class="math inline">\(\beta_1\)</span>?</li>
+<li>¿Qué sucede cuando modificamos el valor del <span class="math inline">\(\beta_1\)</span> sin mover el valor del <span class="math inline">\(\alpha\)</span>?</li>
+<li>¿Crees que puedas llegar a situar la recta en la mitad de la nube de puntos para indicarnos una posible tendencia de la predicción?</li>
+</ol>
+<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
+#| viewerHeight: 600
+library(shiny)
+library(ggplot2)
+library(tidyverse)
+#library(latex2expr)
+
+# Define UI for app that draws a histogram ----
+ui &lt;- fluidPage(
+  withMathJax(),
+  numericInput("intercept", "$\alpha$: ", 
+               value = 5, min = 0, max = 25, step = 1),
+  numericInput("slope", "$\beta_1$:", 
+               value = 0, min = -1, max = +1, step = .1),
+  plotOutput("parPlot")
+)
+
+server &lt;- function(input, output, session) {
+  grf &lt;- function(rr) {
+    x1 &lt;- rnorm(100, 15, 5)
+    x2 &lt;- scale(matrix(rnorm(100), ncol= 1))
+    x12 &lt;- cbind(scale(x1),x2)
+    c1 &lt;- var(x12)
+    chol1 &lt;- solve(chol(c1))
+    newx &lt;-  x12 %*% chol1
+    zapsmall(cor(newx))
+    all.equal( x12[,1], newx[,1] )
+    newc &lt;- matrix( 
+      c(1, rr,
+        rr, 1), ncol = 2)
+    eigen(newc)
+    chol2 &lt;- chol(newc)
+    finalx &lt;- newx %*% chol2 * sd(x1) + mean(x1)
+  finalx |&gt; 
+    data.frame() |&gt; 
+    as_tibble() |&gt; 
+    set_names(c("x", "y"))
+  }
+  
+  grf(.6) -&gt; crrr
+
+v &lt;- reactiveValues(intercept = NULL, slope = NULL)
+
+observeEvent(input$intercept, {
+  v$intercept &lt;- input$intercept
+})
+
+observeEvent(input$slope, {
+  v$slope &lt;- input$slope
+})
+
+output$parPlot &lt;- renderPlot({
+  crrr |&gt; 
+    ggplot(aes(x = x, y = y)) +
+    geom_point() +
+    # geom_smooth(method = "lm", formula = "y ~ x") +
+    geom_abline(slope = v$slope, intercept = v$intercept, aes(colour = "blue")) +
+    theme_minimal() +
+    labs(title = NULL,
+         x = "Variable X", y = "Variable Y") +
+    scale_x_continuous(limits = c(5, 25),
+                             breaks = seq(5, 25, by = 5)) +
+    scale_y_continuous(limits = c(5, 25),
+                             breaks = seq(5, 25, by = 5))
+})
+}
+# Create Shiny app ----
+shinyApp(ui = ui, server = server)</code></pre>
+<p>En efecto, como puedes ver los parámetros aluden a la pendiente de la linea (<span class="math inline">\(\beta_1\)</span>) y su posición cuando cruza el eje Y (<span class="math inline">\(\alpha\)</span>). Más aún, si bien podemos aproximarnos, hasta cierto punto, a colocar la línea en la mitad de la nube de puntos, no tenemos una precisión exacta de esta posición.</p>
+<p>Por todo ello, necesitamos de un estimador que nos permita ubicar de manera correcta a la línea en medio de los puntos. En el caso de la regresión, esa estimación tiene el nombre de “mínimos cuadrados” (least squares). Si bien en el curso, no vamos a profundizar en este estimador, es importante que denotemos la necesidad de usar este tipo de funciones matemáticas para poder ubicar los parámetros idóneos de un modelo.</p>
+</section>
+<section id="contraste-de-hipótesis-para-la-rls" class="level2">
+<h2 class="anchored" data-anchor-id="contraste-de-hipótesis-para-la-rls">Contraste de hipótesis para la RLS</h2>
+<table class="table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 27%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Hipótesis</th>
+<th>Notación</th>
+<th>Interpretación</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nula</td>
+<td><span class="math inline">\(H_0: R^2 = 0\)</span></td>
+<td>No hay relación predictiva</td>
+</tr>
+<tr class="even">
+<td>Bilateral</td>
+<td><span class="math inline">\(H_1: R^2 \neq 0\)</span></td>
+<td>X predice Y</td>
+</tr>
+<tr class="odd">
+<td>Unilateral derecho</td>
+<td><span class="math inline">\(H_1: R^2 &gt; 0\)</span></td>
+<td>X predice positivamente Y</td>
+</tr>
+<tr class="even">
+<td>Unilateral izquierdo</td>
+<td><span class="math inline">\(H_1: R^2 &lt; 0\)</span></td>
+<td>X predice negativamente Y</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="supuestos" class="level2">
+<h2 class="anchored" data-anchor-id="supuestos">Supuestos</h2>
+<p>Es importante que, antes de la regresión, podamos establecer si existe alguna evidencia de asociación lineal entre las variables. Para ello, hemos de analizar la correlación de Pearson o Spearman (según la normalidad de los datos) que corresponda a las hipótesis estadísticas del problema.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Hipótesis de Correlación</th>
+<th>Hipótesis de Regresión</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(H_0: r_{xy} = 0\)</span></td>
+<td><span class="math inline">\(H_0: R^2 = 0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(H_0: r_{xy} \neq 0\)</span></td>
+<td><span class="math inline">\(H_1: R^2 \neq 0\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(H_1: r_{xy} &gt; 0\)</span></td>
+<td><span class="math inline">\(H_1: R^2 &gt; 0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(H_1: r_{xy} &lt; 0\)</span></td>
+<td><span class="math inline">\(H_1: R^2 &lt; 0\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="bondad-del-ajuste" class="level2">
+<h2 class="anchored" data-anchor-id="bondad-del-ajuste">Bondad del Ajuste</h2>
+<ol type="1">
+<li><strong>Coeficiente de determinación (</strong><span class="math inline">\(R^2\)</span><strong>):</strong> permite evaluar la proporción de variabilidad de Y explicada por X. La magnitud de este coeficiente se puede interpretar a partir del criterio de Cohen (1988) de correlación elevado al cuadrado.</li>
+</ol>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Intevalo</th>
+<th>Magnitud</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0 a .01</td>
+<td>Irrelevante</td>
+</tr>
+<tr class="even">
+<td>.01 a .09</td>
+<td>Pequeño</td>
+</tr>
+<tr class="odd">
+<td>.09 a .25</td>
+<td>Mediano</td>
+</tr>
+<tr class="even">
+<td>.25 a 1</td>
+<td>Alto o grande</td>
+</tr>
+</tbody>
+</table>
+<ol start="2" type="1">
+<li><p><strong>Análisis de varianza:</strong> permite valorar hasta qué punto es adecuado el modelo de regresión lineal para estimar los valores de la variable (Y). El contraste de hipótesis es el siguiente:</p>
+<p><span class="math display">\[
+\displaylines{H_0 = R^2 = 0\\ H_1 = R^2 \neq 0}
+\]</span></p></li>
+</ol>
+</section>
+<section id="estimación-de-parámetros" class="level2">
+<h2 class="anchored" data-anchor-id="estimación-de-parámetros">Estimación de parámetros</h2>
+<p>Los parámetros de la regresión responden a los valores necesarios para completar la ecuación de la regresión. Es importante tener en cuenta que estos valores nos pueden permitir estimar un posible valor de Y cuando X cumple un determinado valor. Por ejemplo:</p>
+<ol type="1">
+<li><p>Imaginemos que tenemos que estimar la siguiente regresión donde la procrastinación (X) predice un menor nivel de rendimiento académico (Y).</p>
+<p><span class="math inline">\(Y = B_0 + B_1X_1 \pm \epsilon\)</span></p></li>
+<li><p>Al realizar la regresión, podemos cambiar las incógnitas por sus respectivos valores:</p>
+<p><span class="math inline">\(Y = 2.14 + 1.4(X_1) \pm .8\)</span></p></li>
+<li><p>Ahora imaginemos que tenemos un participante con 10 puntos en la escala de procastinación, ¿cuál sería su valor estimado de rendimiento académico?</p>
+<ol type="1">
+<li><span class="math inline">\(Y = 2.14 + 1.4(10) \pm .8 = [15.34, 16.94]\)</span></li>
+</ol>
+<p>El rendimiento esperado se encontraría dentro del intervalo de confianza de 15.34 a 16.94.</p></li>
+</ol>
+</section>
+<section id="ejemplo-1" class="level2">
+<h2 class="anchored" data-anchor-id="ejemplo-1">Ejemplo 1</h2>
+<p>Un grupo de investigadores plantea que el afrontamiento centrado en el problema predice un menor estrés académico percibido por los estudiantes. Para evaluar su hipótesis tomaron una muestra de 72 jóvenes quienes respondieron a medidas de afrontamiento y estrés académico.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_sav</span>(<span class="st">"https://github.com/renatoparedes/EstadisticaYPsicologiaMatematica/raw/main/INEE/Clase9_BaseRegresionLinealSimpleYMultiple.sav"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 72 × 8
+   Código Sexo       Relación HistVinc Afroproblema Afroemoción Estrés_académico
+   &lt;chr&gt;  &lt;dbl+lbl&gt;  &lt;dbl+lb&gt;    &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;
+ 1 001    2 [Femeni… 1 [Si]          6         29.2          38               45
+ 2 002    2 [Femeni… 0 [No]          7         23.8          45               45
+ 3 003    2 [Femeni… 0 [No]          8         24.6          50               45
+ 4 004    2 [Femeni… 0 [No]          5         21.5          45               45
+ 5 005    2 [Femeni… 1 [Si]          8         30            49               44
+ 6 006    2 [Femeni… 1 [Si]          6         33.1          48               44
+ 7 007    1 [Mascul… 0 [No]          6         31.5          44               43
+ 8 008    1 [Mascul… 1 [Si]         11         21.5          36               43
+ 9 009    2 [Femeni… 0 [No]          8         22.3          35               43
+10 010    2 [Femeni… 1 [Si]          8         23.8          32               42
+# ℹ 62 more rows
+# ℹ 1 more variable: ZRE_1 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<ol type="1">
+<li>Indica las hipótesis de estudio, la ecuación del modelo de regresión lineal simple y el signo que debiera tener beta (<span class="math inline">\(\beta\)</span>) si fuera cierta la <span class="math inline">\(H_1\)</span>.</li>
+<li>Evalúa si habría evidencia a favor de una posible relación entre las variables con un diagrama de dispersión.</li>
+<li>Evalúa la correlación entre las variables.</li>
+<li>Estima los parámetros del modelo de regresión.</li>
+<li>Evalúa la bondad del ajuste del modelo</li>
+<li>Realiza el contraste de hipótesis correspondiente y concluir en función a la hipótesis de estudio.</li>
+</ol>
+<section id="paso-1.-planteamiento-del-ejercicio" class="level3">
+<h3 class="anchored" data-anchor-id="paso-1.-planteamiento-del-ejercicio">Paso 1. Planteamiento del ejercicio</h3>
+<p>HT: El afrontamiento centrado en el problema (X) predice un menor estrés académico (Y) percibido por los estudiantes.</p>
+<p>Variable predictora (X) = Afrontamiento centrado en el problema (ACP)</p>
+<p>Variable respuesta (Y) = Estrés Acádémico (E)</p>
+<p><span class="math inline">\(E = \alpha + \beta_{ACP}X_{ACP} \pm e, con\ \beta &lt; 0\)</span></p>
+<p>Hipótesis Estadísticas:</p>
+<p><span class="math display">\[
+\displaylines{H_0 : \beta_{ACP} = 0 \\ H_1 : \beta_{ACP} &lt; 0\ (unilateral)}
+\]</span></p>
+</section>
+<section id="paso-2.-evidencias-de-posible-relación" class="level3">
+<h3 class="anchored" data-anchor-id="paso-2.-evidencias-de-posible-relación">Paso 2. Evidencias de posible relación</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Afroproblema, <span class="at">y =</span> Estrés_académico)) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Afrontamiento centrado en la emoción"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Estrés Académico"</span>) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Regresión_Lineal_Simple_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="paso-3.-correlación-entre-variables" class="level3">
+<h3 class="anchored" data-anchor-id="paso-3.-correlación-entre-variables">Paso 3. Correlación entre variables</h3>
+<p><span class="math inline">\(\displaylines{H_0: Hay\ normalidad \\ H_1: No\ hay\ normalidad}\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">shapiro_test</span>(Afroproblema, Estrés_académico)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  variable         statistic       p
+  &lt;chr&gt;                &lt;dbl&gt;   &lt;dbl&gt;
+1 Afroproblema         0.974 0.143  
+2 Estrés_académico     0.936 0.00119</code></pre>
+</div>
+</div>
+<p>A partir de la prueba de Shapiro-Wilk, se observa que, si bien el afrontamiento centrado al problema muestra una distribución normal, <span class="math inline">\(SW = .974, p = .143\)</span>, el estrés académico no muestra una distribución normal de los datos, <span class="math inline">\(SW = .936, p = .001\)</span>. Por todo ello, se hará uso de un análisis no paramétrico.</p>
+<p><span class="math inline">\(\displaylines{H_0: r_{ACPE} = 0 \\ H_1: r_{ACPE} &lt; 0\ (unilateral)}\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor_test</span>(Afroproblema, Estrés_académico, <span class="at">method =</span> <span class="st">"spearman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 6
+  var1         var2               cor statistic       p method  
+  &lt;chr&gt;        &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   
+1 Afroproblema Estrés_académico -0.37    85007. 0.00153 Spearman</code></pre>
+</div>
+</div>
+<p><span class="math inline">\(p_{unilateral} = .00153/2 = .00077\)</span></p>
+<p>A partir de la correlación de Spearman, se observa que existe una relación estadísticamente significativa, negativa y mediana entre el afrontamiento centrado en el problema y el estrés académico, <span class="math inline">\(r_{(70)} = -.37, p &lt; .001\ (unilateral)\)</span>.</p>
+</section>
+<section id="paso-4.-estimar-los-parámetros-de-la-regresión" class="level3">
+<h3 class="anchored" data-anchor-id="paso-4.-estimar-los-parámetros-de-la-regresión">Paso 4. Estimar los parámetros de la regresión</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(Estrés_académico <span class="sc">~</span> Afroproblema, <span class="at">data =</span> data) <span class="ot">-&gt;</span> m1</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Estrés_académico ~ Afroproblema, data = data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-23.3968  -4.9886  -0.5203   4.5205  14.4468 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   46.9092     3.5161   13.34  &lt; 2e-16 ***
+Afroproblema  -0.5247     0.1399   -3.75  0.00036 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 7.443 on 70 degrees of freedom
+Multiple R-squared:  0.1673,    Adjusted R-squared:  0.1554 
+F-statistic: 14.07 on 1 and 70 DF,  p-value: 0.0003603</code></pre>
+</div>
+</div>
+<p>La ecuación del modelo sería la siguiente:</p>
+<p><span class="math inline">\(E = 46.9092 - .5247X_{ACP} \pm 7.443\)</span></p>
+</section>
+<section id="paso-5.-bondad-del-ajuste" class="level3">
+<h3 class="anchored" data-anchor-id="paso-5.-bondad-del-ajuste">Paso 5. Bondad del ajuste</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Estrés_académico ~ Afroproblema, data = data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-23.3968  -4.9886  -0.5203   4.5205  14.4468 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   46.9092     3.5161   13.34  &lt; 2e-16 ***
+Afroproblema  -0.5247     0.1399   -3.75  0.00036 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 7.443 on 70 degrees of freedom
+Multiple R-squared:  0.1673,    Adjusted R-squared:  0.1554 
+F-statistic: 14.07 on 1 and 70 DF,  p-value: 0.0003603</code></pre>
+</div>
+</div>
+<ol type="1">
+<li><p><em>Coeficiente de determinación</em>: El coeficiente de determinación es mediano y explica el 16.73% de la variabilidad del estrés académico, <span class="math inline">\(R^2 = .17\)</span>.</p></li>
+<li><p><em>Análisis de varianza</em>:</p>
+<p><span class="math inline">\(\displaylines{H_0: R^2 = 0 \\ H_1:R^2 \neq 0}\)</span></p>
+<p>El modelo es adecuado para ser interpretado, <span class="math inline">\(F(70) = 14.07, p &lt; .001\)</span>.</p></li>
+</ol>
+</section>
+<section id="paso-6.-contraste-de-hipótesis" class="level3">
+<h3 class="anchored" data-anchor-id="paso-6.-contraste-de-hipótesis">Paso 6. Contraste de Hipótesis</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Estrés_académico ~ Afroproblema, data = data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-23.3968  -4.9886  -0.5203   4.5205  14.4468 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   46.9092     3.5161   13.34  &lt; 2e-16 ***
+Afroproblema  -0.5247     0.1399   -3.75  0.00036 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 7.443 on 70 degrees of freedom
+Multiple R-squared:  0.1673,    Adjusted R-squared:  0.1554 
+F-statistic: 14.07 on 1 and 70 DF,  p-value: 0.0003603</code></pre>
+</div>
+</div>
+<p>Los elementos que tenemos que evaluar en el contraste son los siguientes:</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Criterio</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Significatividad (Contraste de hipótesis)</td>
+<td>Dado que <span class="math inline">\(p_{unilateral} = .00036/2 = .00018\)</span> se rechaza <span class="math inline">\(H_0\)</span>.</td>
+</tr>
+<tr class="even">
+<td>Sentido</td>
+<td>El coeficiente Beta no estandarizado es -.53, por lo que el sentido es <strong>negativo</strong></td>
+</tr>
+<tr class="odd">
+<td>Grados de Libertad</td>
+<td><span class="math inline">\(N-k-1\)</span>, donde <span class="math inline">\(N\)</span> es la cantidad total de participantes y <span class="math inline">\(k\)</span> la cantidad de variables independientes (predictoras) en el modelo. De esta forma, tenemos <span class="math inline">\(72-1-1=70\)</span> grado de libertad.</td>
+</tr>
+</tbody>
+</table>
+<p>A partir del análisis de regresión, se observa que el afrontamiento centrado en el problema es un predictor estadísticamente significativo y negativo del estrés académico, <span class="math inline">\(\beta_{ACP} = -.53, t_{(70)} = -3.75, p_{unilateral} &lt; .001\)</span>.</p>
+</section>
+<section id="paso-7.-conclusión-final" class="level3">
+<h3 class="anchored" data-anchor-id="paso-7.-conclusión-final">Paso 7. Conclusión final</h3>
+<p>A partir del análisis de regresión lineal simple, con el afrontamiento centrado en el problema como predictor del estrés académico, se encontró que existe un modelo adecuado con un coeficiente de determinación mediano que explica el 16.73% de la variabilidad del estrés, <span class="math inline">\(F(70) = 14.07, p &lt; .001, R^2 = .17\)</span>. Específicamente, se encontró que el afrontamiento centrado en el problema es un predictor estadísticamente significativo y negativo del estrés académico, <span class="math inline">\(\beta_{ACP} = -.53, t_{(70)} = -3.75, p_{unilateral} &lt; .001\)</span>. Por todo ello, se puede concluir que se cumple con la hipótesis del equipo de investigación.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

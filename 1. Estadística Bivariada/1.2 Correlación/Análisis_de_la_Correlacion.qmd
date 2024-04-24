@@ -232,7 +232,7 @@ output$dispPlot <- renderPlot({
 # Create Shiny app ----
 shinyApp(ui = ui, server = server)
 ```
-  
+
 Como puedes observar, la "pendiente" o caída de la recta va a ser diferente dependiendo del coeficiente de correlación que se tenga. En la @fig-corrs podrás ver una figura resumen sobre las correlaciones y las tendencias que puede tener la línea.
 
 ```{r}
@@ -316,7 +316,10 @@ Un grupo de estudiantes de la Facultad de Psicología, interesados en el trabajo
 
 **Paso 0: cargar los datos**
 
-Si deseamos, podemos tener una visualización más elegante de la información. Para ello, abreviaremos a dos decimales todas las variables cuantitativas de la base y pediremos al paquete `DT` que nos genere una bonita tabla:
+```{r}
+dt <- haven::read_sav("Base - Ejercicios Correlación.sav")
+dt
+```
 
 **Paso 1: hipótesis de trabajo**
 
@@ -330,6 +333,14 @@ $$
 
 **Paso 3: diagrama de dispersión**
 
+```{r}
+dt |>  # <1>
+  ggplot(aes(x = Resiliencia, y = PTSD)) + # <2>
+  geom_point() + # <3>
+  geom_smooth(method = "lm", formula = "y ~ x") + # <4>
+  theme_minimal() # <5>
+```
+
 1.  Traemos la base donde se encuentran las variables de interés
 2.  Definimos que variables tendremos en el eje "x" y en el eje "y".
 3.  Generamos la dispersión de puntos
@@ -340,9 +351,20 @@ A partir del diagrama de dispersión, se observa que puede existir una relación
 
 **Paso 4: evaluar la normalidad**
 
+```{r}
+dt |> 
+  shapiro_test(Resiliencia, PTSD)
+```
+
 A partir de la prueba de normalidad de Shapiro-Wilk, se observa que el PTSD, $SW = .99, p = .59$ y la resiliencia $SW = .98, p = .253$, presentan una distribución normal de los datos. Por todo ello, se aplicará la correlación de Pearson.
 
 **Paso 5: análisis de la correlación**
+
+```{r}
+dt |> # <1>
+  cor_test(c("Resiliencia", "PTSD"), # <2>
+           method = "pearson") # <3>
+```
 
 1.  Traemos los datos
 
@@ -361,12 +383,16 @@ Para construir la conclusión en el formato APA, tenemos que fijarnos en los sig
 
 3.  **Fuerza:** [El valor absoluto de la correlación (cor) nos permite identificar, según el criterio de Cohen (1988), la magnitud de la asociación. Ver @tbl-cor.]{.underline} En este caso, la correlación es grande (r \> .5).
 
-4.  **Grados de libertad:** [N -- 2, donde N es la cantidad de participantes.]{.underline} En este caso, 100 - 2 = 98.
+4.  **Grados de libertad:** [$N-2$, donde]{.underline} $N$ [es la cantidad de participantes.]{.underline} En este caso, $100 - 2 = 98$.
 :::
 
 ## Ejercicios
 
 Un grupo de estudiantes de la Facultad de Psicología, interesados en la problemática de salud mental en jóvenes ha planteado una investigación con el objetivo de evaluar las relaciones entre salud percibida, bienestar social, resiliencia, depresión y estrés en un grupo de estudiantes universitarios. Ellos solicitan tu apoyo para realizar el análisis de sus datos. Resuelve las siguientes preguntas, teniendo en consideración los pasos señalados en clase.
+
+```{r}
+
+```
 
 1\. Plantea las hipótesis de trabajo (HT) y las hipótesis estadísticas para cada HT.
 

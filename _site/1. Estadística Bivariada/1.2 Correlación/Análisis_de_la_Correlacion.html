@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Investigación No Experimental y Estadística - Análisis de correlación en la Investigación en Psicología</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<meta name="shinylive:serviceworker_dir" content="../..">
+<script src="../../site_libs/quarto-contrib/shinylive-0.2.3/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="../../site_libs/quarto-contrib/shinylive-0.2.3/shinylive/run-python-blocks.js" type="module"></script>
+<link href="../../site_libs/quarto-contrib/shinylive-0.2.3/shinylive/shinylive.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../../site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<script src="../../site_libs/plotly-binding-4.10.3/plotly.js"></script>
+<script src="../../site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="../../site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="../../site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+<script src="../../site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="../../site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../../site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">1. Estadística Bivariada</li><li class="breadcrumb-item"><a href="../../1. Estadística Bivariada/1.2 Correlación/Análisis_de_la_Correlacion.html">1.2 Correlación</a></li><li class="breadcrumb-item"><a href="../../1. Estadística Bivariada/1.2 Correlación/Análisis_de_la_Correlacion.html">Análisis de correlación en la Investigación en Psicología</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Investigación No Experimental y Estadística</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">1. Estadística Bivariada</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">1.2 Correlación</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../1. Estadística Bivariada/1.2 Correlación/Análisis_de_la_Correlacion.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Análisis de correlación en la Investigación en Psicología</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">2. Estadística Multivariada</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">
+ <span class="menu-text">2.1 Regresión Lineal Simple</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../2. Estadística Multivariada/2.1 Regresión Lineal Simple/Regresión_Lineal_Simple.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Análisis de regresión</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#objetivos" id="toc-objetivos" class="nav-link active" data-scroll-target="#objetivos">Objetivos</a></li>
+  <li><a href="#qué-es-la-correlación" id="toc-qué-es-la-correlación" class="nav-link" data-scroll-target="#qué-es-la-correlación">¿Qué es la correlación?</a></li>
+  <li><a href="#coeficiente-de-correlación" id="toc-coeficiente-de-correlación" class="nav-link" data-scroll-target="#coeficiente-de-correlación">Coeficiente de correlación</a></li>
+  <li><a href="#correlación-de-pearson" id="toc-correlación-de-pearson" class="nav-link" data-scroll-target="#correlación-de-pearson">Correlación de Pearson</a></li>
+  <li><a href="#normalidad" id="toc-normalidad" class="nav-link" data-scroll-target="#normalidad">Normalidad</a></li>
+  <li><a href="#patrones-de-correlación" id="toc-patrones-de-correlación" class="nav-link" data-scroll-target="#patrones-de-correlación">Patrones de correlación</a></li>
+  <li><a href="#diagrama-de-dispersión" id="toc-diagrama-de-dispersión" class="nav-link" data-scroll-target="#diagrama-de-dispersión">Diagrama de dispersión</a></li>
+  <li><a href="#actividad-1-interpretando-el-diagrama-de-dispersión" id="toc-actividad-1-interpretando-el-diagrama-de-dispersión" class="nav-link" data-scroll-target="#actividad-1-interpretando-el-diagrama-de-dispersión">Actividad 1: Interpretando el diagrama de dispersión</a></li>
+  <li><a href="#actividad-2-adivina-la-correlación" id="toc-actividad-2-adivina-la-correlación" class="nav-link" data-scroll-target="#actividad-2-adivina-la-correlación">Actividad 2: Adivina la correlación</a></li>
+  <li><a href="#pasos-para-estimar-una-correlación" id="toc-pasos-para-estimar-una-correlación" class="nav-link" data-scroll-target="#pasos-para-estimar-una-correlación">Pasos para estimar una correlación</a></li>
+  <li><a href="#ejemplo" id="toc-ejemplo" class="nav-link" data-scroll-target="#ejemplo">Ejemplo</a></li>
+  <li><a href="#ejercicios" id="toc-ejercicios" class="nav-link" data-scroll-target="#ejercicios">Ejercicios</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Análisis de correlación en la Investigación en Psicología</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="objetivos" class="level2">
+<h2 class="anchored" data-anchor-id="objetivos">Objetivos</h2>
+<p>En esta sesión vamos a realizar las siguientes tareas:</p>
+<ul>
+<li><p>Entender la lógica de la correlación y su importancia</p></li>
+<li><p>Reconocer el aporte de este análisis a la investigación en psicología</p></li>
+<li><p>Conocer el procedimiento para ejecutar un análisis de la correlación en R</p></li>
+</ul>
+</section>
+<section id="qué-es-la-correlación" class="level2">
+<h2 class="anchored" data-anchor-id="qué-es-la-correlación">¿Qué es la correlación?</h2>
+<p>Es un análisis estadístico que nos permite evaluar la <strong>relación entre dos variables cuantitativas</strong> (al menos la mayor parte del tiempo).</p>
+<p>Es importante recordar que una correlación <strong>no involucra necesariamente una relación de causa y efecto.</strong></p>
+<p>El análisis de la correlación es una pieza importante en la estadística, en tanto puede observarse en el corazón de análisis más complejos como el <strong>modelado con ecuaciones estructurales</strong>.</p>
+</section>
+<section id="coeficiente-de-correlación" class="level2">
+<h2 class="anchored" data-anchor-id="coeficiente-de-correlación">Coeficiente de correlación</h2>
+<p>Indicador que puede tomar valores entre -1 a +1 e informa sobre la <strong>fuerza</strong> y el <strong>sentido</strong> de la relación.</p>
+<div id="tbl-cor" class="anchored">
+<table class="table">
+<caption>Table&nbsp;1: Interpretación del coeficiente de correlación</caption>
+<colgroup>
+<col style="width: 45%">
+<col style="width: 54%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Sentido</th>
+<th>Fuerza</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p>el signo positivo o negativo señala la dirección de la asociación.</p>
+<ul>
+<li><p>Positivo (directa): A mayor ansiedad hay mayor depresión (<span class="math inline">\(\rho_{xy} &gt; 0\)</span>)</p></li>
+<li><p>Negativo (inversa): A mayor ansiedad hay menor bienestar (<span class="math inline">\(\rho_{xy} &lt; 0\)</span>)</p></li>
+</ul></td>
+<td><p>el valor absoluto del coeficiente puede ser interpretado mediante el criterio de Cohen (1988).</p>
+<ul>
+<li><p><span class="math inline">\(\rho_{xy} &gt; .1\)</span> = pequeño</p></li>
+<li><p><span class="math inline">\(\rho_{xy} &gt; .3\)</span> = mediano</p></li>
+<li><p><span class="math inline">\(\rho_{xy} &gt; .5\)</span> = grande</p></li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="correlación-de-pearson" class="level2">
+<h2 class="anchored" data-anchor-id="correlación-de-pearson">Correlación de Pearson</h2>
+<p>El coeficiente de asociación más común es el coeficiente de correlación de Pearson y su fórmula es la siguiente:</p>
+<p><span class="math display">\[
+\rho_{xy} = \frac{\Sigma(x_i - \bar{x})(y_i - \bar{y})} {\sqrt{\Sigma(x_i - \bar{x})^2\Sigma(y_i - \bar{y})^2}}
+\]</span></p>
+<p>Donde <span class="math inline">\(r\)</span> es el coeficiente de correlación, <span class="math inline">\(x_i\)</span> los valores de x en la muestra, <span class="math inline">\(\bar{x}\)</span> la media de los valores de x, <span class="math inline">\(y_i\)</span> los valores de y en la muestra, <span class="math inline">\(\bar{y}\)</span> la media de los valores de y. De esta forma, se puede observar que el coeficiente de correlación de Pearson es un análisis paramétrico, en tanto hace uso de la media de los participantes para estimar la asociación entre las variables de interés. En caso no hubiese normalidad en los datos, se tendría que aplicar la correlación de Spearman.</p>
+</section>
+<section id="normalidad" class="level2">
+<h2 class="anchored" data-anchor-id="normalidad">Normalidad</h2>
+<p>Dicho esto, es importante recalcar que, dado que la correlación requiere del uso de dos variables, su tipo de análisis se denomina “bivariado”. Así, para identificar el tipo de análisis a realizar (paramétrico o no paramétrico), es necesario evaluar la normalidad de la distribución de cada variable. La regla de decisión es la siguiente “si y solo si ambas variables tienen distribución normal, se aplicará la correlación de Pearson”.</p>
+<p>Para ilustrar esta situación, veamos un ejemplo. Imaginemos que contamos con la siguiente base de datos <code>starwars</code> .</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 87
+Columns: 14
+$ name       &lt;chr&gt; "Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader", "Leia Or…
+$ height     &lt;int&gt; 172, 167, 96, 202, 150, 178, 165, 97, 183, 182, 188, 180, 2…
+$ mass       &lt;dbl&gt; 77.0, 75.0, 32.0, 136.0, 49.0, 120.0, 75.0, 32.0, 84.0, 77.…
+$ hair_color &lt;chr&gt; "blond", NA, NA, "none", "brown", "brown, grey", "brown", N…
+$ skin_color &lt;chr&gt; "fair", "gold", "white, blue", "white", "light", "light", "…
+$ eye_color  &lt;chr&gt; "blue", "yellow", "red", "yellow", "brown", "blue", "blue",…
+$ birth_year &lt;dbl&gt; 19.0, 112.0, 33.0, 41.9, 19.0, 52.0, 47.0, NA, 24.0, 57.0, …
+$ sex        &lt;chr&gt; "male", "none", "none", "male", "female", "male", "female",…
+$ gender     &lt;chr&gt; "masculine", "masculine", "masculine", "masculine", "femini…
+$ homeworld  &lt;chr&gt; "Tatooine", "Tatooine", "Naboo", "Tatooine", "Alderaan", "T…
+$ species    &lt;chr&gt; "Human", "Droid", "Droid", "Human", "Human", "Human", "Huma…
+$ films      &lt;list&gt; &lt;"The Empire Strikes Back", "Revenge of the Sith", "Return…
+$ vehicles   &lt;list&gt; &lt;"Snowspeeder", "Imperial Speeder Bike"&gt;, &lt;&gt;, &lt;&gt;, &lt;&gt;, "Imp…
+$ starships  &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &lt;&gt;, "TIE Advanced x1",…</code></pre>
+</div>
+</div>
+<p>En esta base, se desea evaluar la relación entre la masa y la altura de los personajes de la película. Para ello, primero necesitamos evaluar la normalidad de ambas variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">shapiro_test</span>(height, mass)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  variable statistic        p
+  &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;
+1 height       0.878 1.45e- 6
+2 mass         0.235 6.26e-16</code></pre>
+</div>
+</div>
+<p>Como indica la prueba Shapiro-Wilk, tanto la altura, <span class="math inline">\(SW = .88, p &lt; .001\)</span>, como la masa, <span class="math inline">\(SW = .24, p &lt; .001\)</span>, presentan una distribución no normal de los datos. Así, dado que no ambas no muestran normalidad, se habría de aplicar la prueba de correlación de Spearman.</p>
+</section>
+<section id="patrones-de-correlación" class="level2">
+<h2 class="anchored" data-anchor-id="patrones-de-correlación">Patrones de correlación</h2>
+<p>Hay muchas maneras de concebir la relación entre dos variables. Mayormente estos tipos de correlación toman su nombre a partir de la forma que buscan encontrar en los datos.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-pattern-cor" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Análisis_de_la_Correlacion_files/figure-html/fig-pattern-cor-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Diferentes tipos de relación entre variables</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Cabe mencionar que en este curso, nos centraremos en las relaciones de corte lineal. Este tipo de asociaciones son comunes en psicología dado que nos permiten una interpretación simple de la dinámica entre dos variables (p.ej. “A mas salud, mayor bienestar”).</p>
+</section>
+<section id="diagrama-de-dispersión" class="level2">
+<h2 class="anchored" data-anchor-id="diagrama-de-dispersión">Diagrama de dispersión</h2>
+<p>El gráfico por excelente de la correlación es el gráfico de dispersión de puntos. Este gráfico se puede entender de la siguiente forma “a tal nivel de X, podemos encontrar esta Y”. A fin de entender con mayor facilidad este concepto, te pedimos que pases tu puntero por encima de los puntos del gráfico de dispersión, ¿podrías indicar el valor de <code>x</code> e <code>y</code> en cada uno?</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-d96970b9501c191ad406" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-d96970b9501c191ad406">{"x":{"data":[{"x":[28,78,40,88,94,4,52,89,55,45,95,45,67,57,10,89,24,4,32,95,88,69,64,99,65,70,54,59,28,14,96,90,69,79,2,47,75,21,31,23,14,41,41,36,15,13,23,46,26,85,4,44,79,12,56,20,12,75,89,37,66,9,38,27,81,44,81,81,79,43,75,62,71,0,47,22,37,61,35,11,24,66,41,78,10,43,98,89,88,17,13,65,34,65,32,18,78,9,46,51],"y":[79,116,83,152,125,84,63,137,99,93,138,78,100,78,37,132,79,54,96,172,115,62,124,120,91,130,90,76,78,59,131,134,101,130,47,97,136,77,70,92,82,96,89,68,90,49,113,120,67,102,39,92,112,53,78,66,45,80,118,100,95,70,50,72,129,94,120,106,100,66,116,84,100,44,127,55,86,103,60,58,99,115,86,108,17,109,104,140,163,36,75,100,47,75,45,55,87,71,131,67],"text":["Ansiedad: 28<br />Depresión:  79","Ansiedad: 78<br />Depresión: 116","Ansiedad: 40<br />Depresión:  83","Ansiedad: 88<br />Depresión: 152","Ansiedad: 94<br />Depresión: 125","Ansiedad:  4<br />Depresión:  84","Ansiedad: 52<br />Depresión:  63","Ansiedad: 89<br />Depresión: 137","Ansiedad: 55<br />Depresión:  99","Ansiedad: 45<br />Depresión:  93","Ansiedad: 95<br />Depresión: 138","Ansiedad: 45<br />Depresión:  78","Ansiedad: 67<br />Depresión: 100","Ansiedad: 57<br />Depresión:  78","Ansiedad: 10<br />Depresión:  37","Ansiedad: 89<br />Depresión: 132","Ansiedad: 24<br />Depresión:  79","Ansiedad:  4<br />Depresión:  54","Ansiedad: 32<br />Depresión:  96","Ansiedad: 95<br />Depresión: 172","Ansiedad: 88<br />Depresión: 115","Ansiedad: 69<br />Depresión:  62","Ansiedad: 64<br />Depresión: 124","Ansiedad: 99<br />Depresión: 120","Ansiedad: 65<br />Depresión:  91","Ansiedad: 70<br />Depresión: 130","Ansiedad: 54<br />Depresión:  90","Ansiedad: 59<br />Depresión:  76","Ansiedad: 28<br />Depresión:  78","Ansiedad: 14<br />Depresión:  59","Ansiedad: 96<br />Depresión: 131","Ansiedad: 90<br />Depresión: 134","Ansiedad: 69<br />Depresión: 101","Ansiedad: 79<br />Depresión: 130","Ansiedad:  2<br />Depresión:  47","Ansiedad: 47<br />Depresión:  97","Ansiedad: 75<br />Depresión: 136","Ansiedad: 21<br />Depresión:  77","Ansiedad: 31<br />Depresión:  70","Ansiedad: 23<br />Depresión:  92","Ansiedad: 14<br />Depresión:  82","Ansiedad: 41<br />Depresión:  96","Ansiedad: 41<br />Depresión:  89","Ansiedad: 36<br />Depresión:  68","Ansiedad: 15<br />Depresión:  90","Ansiedad: 13<br />Depresión:  49","Ansiedad: 23<br />Depresión: 113","Ansiedad: 46<br />Depresión: 120","Ansiedad: 26<br />Depresión:  67","Ansiedad: 85<br />Depresión: 102","Ansiedad:  4<br />Depresión:  39","Ansiedad: 44<br />Depresión:  92","Ansiedad: 79<br />Depresión: 112","Ansiedad: 12<br />Depresión:  53","Ansiedad: 56<br />Depresión:  78","Ansiedad: 20<br />Depresión:  66","Ansiedad: 12<br />Depresión:  45","Ansiedad: 75<br />Depresión:  80","Ansiedad: 89<br />Depresión: 118","Ansiedad: 37<br />Depresión: 100","Ansiedad: 66<br />Depresión:  95","Ansiedad:  9<br />Depresión:  70","Ansiedad: 38<br />Depresión:  50","Ansiedad: 27<br />Depresión:  72","Ansiedad: 81<br />Depresión: 129","Ansiedad: 44<br />Depresión:  94","Ansiedad: 81<br />Depresión: 120","Ansiedad: 81<br />Depresión: 106","Ansiedad: 79<br />Depresión: 100","Ansiedad: 43<br />Depresión:  66","Ansiedad: 75<br />Depresión: 116","Ansiedad: 62<br />Depresión:  84","Ansiedad: 71<br />Depresión: 100","Ansiedad:  0<br />Depresión:  44","Ansiedad: 47<br />Depresión: 127","Ansiedad: 22<br />Depresión:  55","Ansiedad: 37<br />Depresión:  86","Ansiedad: 61<br />Depresión: 103","Ansiedad: 35<br />Depresión:  60","Ansiedad: 11<br />Depresión:  58","Ansiedad: 24<br />Depresión:  99","Ansiedad: 66<br />Depresión: 115","Ansiedad: 41<br />Depresión:  86","Ansiedad: 78<br />Depresión: 108","Ansiedad: 10<br />Depresión:  17","Ansiedad: 43<br />Depresión: 109","Ansiedad: 98<br />Depresión: 104","Ansiedad: 89<br />Depresión: 140","Ansiedad: 88<br />Depresión: 163","Ansiedad: 17<br />Depresión:  36","Ansiedad: 13<br />Depresión:  75","Ansiedad: 65<br />Depresión: 100","Ansiedad: 34<br />Depresión:  47","Ansiedad: 65<br />Depresión:  75","Ansiedad: 32<br />Depresión:  45","Ansiedad: 18<br />Depresión:  55","Ansiedad: 78<br />Depresión:  87","Ansiedad:  9<br />Depresión:  71","Ansiedad: 46<br />Depresión: 131","Ansiedad: 51<br />Depresión:  67"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,0,0,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,1.2531645569620253,2.5063291139240507,3.759493670886076,5.0126582278481013,6.2658227848101262,7.518987341772152,8.7721518987341778,10.025316455696203,11.278481012658228,12.531645569620252,13.784810126582279,15.037974683544304,16.291139240506329,17.544303797468356,18.797468354430379,20.050632911392405,21.303797468354432,22.556962025316455,23.810126582278482,25.063291139240505,26.316455696202532,27.569620253164558,28.822784810126581,30.075949367088608,31.329113924050635,32.582278481012658,33.835443037974684,35.088607594936711,36.341772151898738,37.594936708860757,38.848101265822784,40.101265822784811,41.354430379746837,42.607594936708864,43.860759493670884,45.11392405063291,46.367088607594937,47.620253164556964,48.87341772151899,50.12658227848101,51.379746835443036,52.632911392405063,53.88607594936709,55.139240506329116,56.392405063291143,57.645569620253163,58.898734177215189,60.151898734177216,61.405063291139243,62.658227848101269,63.911392405063289,65.164556962025316,66.417721518987349,67.670886075949369,68.924050632911388,70.177215189873422,71.430379746835442,72.683544303797476,73.936708860759495,75.189873417721515,76.443037974683548,77.696202531645568,78.949367088607602,80.202531645569621,81.455696202531641,82.708860759493675,83.962025316455694,85.215189873417728,86.468354430379748,87.721518987341767,88.974683544303801,90.22784810126582,91.481012658227854,92.734177215189874,93.987341772151893,95.240506329113927,96.493670886075947,97.74683544303798,99],"y":[49.774107029823618,50.815218298658394,51.856329567493169,52.897440836327945,53.938552105162728,54.979663373997504,56.020774642832279,57.061885911667055,58.102997180501831,59.144108449336606,60.185219718171382,61.226330987006165,62.26744225584094,63.308553524675716,64.349664793510499,65.390776062345267,66.43188733118005,67.472998600014819,68.514109868849602,69.555221137684384,70.596332406519153,71.637443675353921,72.678554944188704,73.719666213023487,74.760777481858256,75.801888750693038,76.843000019527807,77.88411128836259,78.925222557197372,79.966333826032155,81.007445094866924,82.048556363701692,83.089667632536475,84.130778901371258,85.171890170206041,86.213001439040795,87.254112707875578,88.295223976710361,89.336335245545143,90.377446514379912,91.418557783214681,92.459669052049463,93.500780320884246,94.541891589719029,95.583002858553797,96.624114127388566,97.665225396223349,98.706336665058132,99.7474479338929,100.78855920272768,101.82967047156245,102.87078174039723,103.91189300923202,104.9530042780668,105.99411554690155,107.03522681573634,108.07633808457112,109.11744935340589,110.15856062224069,111.19967189107544,112.24078315991022,113.28189442874501,114.32300569757979,115.36411696641457,116.40522823524933,117.44633950408411,118.48745077291889,119.52856204175364,120.56967331058846,121.61078457942321,122.65189584825799,123.69300711709278,124.73411838592753,125.77522965476231,126.8163409235971,127.85745219243188,128.89856346126666,129.93967473010142,130.9807859989362,132.02189726777098],"text":["Ansiedad:  0.000000<br />Depresión:  49.77411","Ansiedad:  1.253165<br />Depresión:  50.81522","Ansiedad:  2.506329<br />Depresión:  51.85633","Ansiedad:  3.759494<br />Depresión:  52.89744","Ansiedad:  5.012658<br />Depresión:  53.93855","Ansiedad:  6.265823<br />Depresión:  54.97966","Ansiedad:  7.518987<br />Depresión:  56.02077","Ansiedad:  8.772152<br />Depresión:  57.06189","Ansiedad: 10.025316<br />Depresión:  58.10300","Ansiedad: 11.278481<br />Depresión:  59.14411","Ansiedad: 12.531646<br />Depresión:  60.18522","Ansiedad: 13.784810<br />Depresión:  61.22633","Ansiedad: 15.037975<br />Depresión:  62.26744","Ansiedad: 16.291139<br />Depresión:  63.30855","Ansiedad: 17.544304<br />Depresión:  64.34966","Ansiedad: 18.797468<br />Depresión:  65.39078","Ansiedad: 20.050633<br />Depresión:  66.43189","Ansiedad: 21.303797<br />Depresión:  67.47300","Ansiedad: 22.556962<br />Depresión:  68.51411","Ansiedad: 23.810127<br />Depresión:  69.55522","Ansiedad: 25.063291<br />Depresión:  70.59633","Ansiedad: 26.316456<br />Depresión:  71.63744","Ansiedad: 27.569620<br />Depresión:  72.67855","Ansiedad: 28.822785<br />Depresión:  73.71967","Ansiedad: 30.075949<br />Depresión:  74.76078","Ansiedad: 31.329114<br />Depresión:  75.80189","Ansiedad: 32.582278<br />Depresión:  76.84300","Ansiedad: 33.835443<br />Depresión:  77.88411","Ansiedad: 35.088608<br />Depresión:  78.92522","Ansiedad: 36.341772<br />Depresión:  79.96633","Ansiedad: 37.594937<br />Depresión:  81.00745","Ansiedad: 38.848101<br />Depresión:  82.04856","Ansiedad: 40.101266<br />Depresión:  83.08967","Ansiedad: 41.354430<br />Depresión:  84.13078","Ansiedad: 42.607595<br />Depresión:  85.17189","Ansiedad: 43.860759<br />Depresión:  86.21300","Ansiedad: 45.113924<br />Depresión:  87.25411","Ansiedad: 46.367089<br />Depresión:  88.29522","Ansiedad: 47.620253<br />Depresión:  89.33634","Ansiedad: 48.873418<br />Depresión:  90.37745","Ansiedad: 50.126582<br />Depresión:  91.41856","Ansiedad: 51.379747<br />Depresión:  92.45967","Ansiedad: 52.632911<br />Depresión:  93.50078","Ansiedad: 53.886076<br />Depresión:  94.54189","Ansiedad: 55.139241<br />Depresión:  95.58300","Ansiedad: 56.392405<br />Depresión:  96.62411","Ansiedad: 57.645570<br />Depresión:  97.66523","Ansiedad: 58.898734<br />Depresión:  98.70634","Ansiedad: 60.151899<br />Depresión:  99.74745","Ansiedad: 61.405063<br />Depresión: 100.78856","Ansiedad: 62.658228<br />Depresión: 101.82967","Ansiedad: 63.911392<br />Depresión: 102.87078","Ansiedad: 65.164557<br />Depresión: 103.91189","Ansiedad: 66.417722<br />Depresión: 104.95300","Ansiedad: 67.670886<br />Depresión: 105.99412","Ansiedad: 68.924051<br />Depresión: 107.03523","Ansiedad: 70.177215<br />Depresión: 108.07634","Ansiedad: 71.430380<br />Depresión: 109.11745","Ansiedad: 72.683544<br />Depresión: 110.15856","Ansiedad: 73.936709<br />Depresión: 111.19967","Ansiedad: 75.189873<br />Depresión: 112.24078","Ansiedad: 76.443038<br />Depresión: 113.28189","Ansiedad: 77.696203<br />Depresión: 114.32301","Ansiedad: 78.949367<br />Depresión: 115.36412","Ansiedad: 80.202532<br />Depresión: 116.40523","Ansiedad: 81.455696<br />Depresión: 117.44634","Ansiedad: 82.708861<br />Depresión: 118.48745","Ansiedad: 83.962025<br />Depresión: 119.52856","Ansiedad: 85.215190<br />Depresión: 120.56967","Ansiedad: 86.468354<br />Depresión: 121.61078","Ansiedad: 87.721519<br />Depresión: 122.65190","Ansiedad: 88.974684<br />Depresión: 123.69301","Ansiedad: 90.227848<br />Depresión: 124.73412","Ansiedad: 91.481013<br />Depresión: 125.77523","Ansiedad: 92.734177<br />Depresión: 126.81634","Ansiedad: 93.987342<br />Depresión: 127.85745","Ansiedad: 95.240506<br />Depresión: 128.89856","Ansiedad: 96.493671<br />Depresión: 129.93967","Ansiedad: 97.746835<br />Depresión: 130.98079","Ansiedad: 99.000000<br />Depresión: 132.02190"],"type":"scatter","mode":"lines","name":"fitted values","line":{"width":3.7795275590551185,"color":"rgba(51,102,255,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,1.2531645569620253,2.5063291139240507,3.759493670886076,5.0126582278481013,6.2658227848101262,7.518987341772152,8.7721518987341778,10.025316455696203,11.278481012658228,12.531645569620252,13.784810126582279,15.037974683544304,16.291139240506329,17.544303797468356,18.797468354430379,20.050632911392405,21.303797468354432,22.556962025316455,23.810126582278482,25.063291139240505,26.316455696202532,27.569620253164558,28.822784810126581,30.075949367088608,31.329113924050635,32.582278481012658,33.835443037974684,35.088607594936711,36.341772151898738,37.594936708860757,38.848101265822784,40.101265822784811,41.354430379746837,42.607594936708864,43.860759493670884,45.11392405063291,46.367088607594937,47.620253164556964,48.87341772151899,50.12658227848101,51.379746835443036,52.632911392405063,53.88607594936709,55.139240506329116,56.392405063291143,57.645569620253163,58.898734177215189,60.151898734177216,61.405063291139243,62.658227848101269,63.911392405063289,65.164556962025316,66.417721518987349,67.670886075949369,68.924050632911388,70.177215189873422,71.430379746835442,72.683544303797476,73.936708860759495,75.189873417721515,76.443037974683548,77.696202531645568,78.949367088607602,80.202531645569621,81.455696202531641,82.708860759493675,83.962025316455694,85.215189873417728,86.468354430379748,87.721518987341767,88.974683544303801,90.22784810126582,91.481012658227854,92.734177215189874,93.987341772151893,95.240506329113927,96.493670886075947,97.74683544303798,99,99,99,97.74683544303798,96.493670886075947,95.240506329113927,93.987341772151893,92.734177215189874,91.481012658227854,90.22784810126582,88.974683544303801,87.721518987341767,86.468354430379748,85.215189873417728,83.962025316455694,82.708860759493675,81.455696202531641,80.202531645569621,78.949367088607602,77.696202531645568,76.443037974683548,75.189873417721515,73.936708860759495,72.683544303797476,71.430379746835442,70.177215189873422,68.924050632911388,67.670886075949369,66.417721518987349,65.164556962025316,63.911392405063289,62.658227848101269,61.405063291139243,60.151898734177216,58.898734177215189,57.645569620253163,56.392405063291143,55.139240506329116,53.88607594936709,52.632911392405063,51.379746835443036,50.12658227848101,48.87341772151899,47.620253164556964,46.367088607594937,45.11392405063291,43.860759493670884,42.607594936708864,41.354430379746837,40.101265822784811,38.848101265822784,37.594936708860757,36.341772151898738,35.088607594936711,33.835443037974684,32.582278481012658,31.329113924050635,30.075949367088608,28.822784810126581,27.569620253164558,26.316455696202532,25.063291139240505,23.810126582278482,22.556962025316455,21.303797468354432,20.050632911392405,18.797468354430379,17.544303797468356,16.291139240506329,15.037974683544304,13.784810126582279,12.531645569620252,11.278481012658228,10.025316455696203,8.7721518987341778,7.518987341772152,6.2658227848101262,5.0126582278481013,3.759493670886076,2.5063291139240507,1.2531645569620253,0,0],"y":[42.027913104131045,43.216432572071511,44.403965998227555,45.590454105517033,46.775833245276573,47.960035042448638,49.142986013760364,50.324607157964564,51.504813517569765,52.68351371198704,53.860609442704053,55.035994972005241,56.209556577943019,57.381171989787255,58.550709810103122,59.718028932001232,60.882977963037483,62.045394670776162,63.205105469218154,64.361924970150909,65.515655628970478,66.666087520548729,67.812998287062072,68.956153306009199,70.095306132394541,71.230199273504709,72.360565356892465,73.486128750931613,74.606607691283358,75.721716954460376,76.831171100196215,77.934688276792912,79.031994548094758,80.122828658452605,81.206947105669897,82.284129345664951,83.354182911969716,84.41694820445359,85.47230269079796,86.52016427575505,87.560493628944002,88.593295320202202,89.618617686995591,90.636551442766816,91.647227118420119,92.650811501656989,93.647503292784776,94.637528226330048,95.621133914400005,96.598584652726828,97.570156398614827,98.536132087724539,99.496797409929002,100.45243711865825,101.40333190709654,102.34975585067332,103.29197438945047,104.23024280613157,105.16480514464207,106.0958935093112,107.02372768425401,107.94851501529826,108.87045050159384,109.78971704996061,110.70648585138576,111.62091684538228,112.53315924384651,113.4433520914198,114.35162484407633,115.25809795170906,116.16288343389361,117.06608544082371,117.96780079370448,118.86811950072234,119.76712524615826,120.66489585133522,121.56150370694799,122.45701617696481,123.35149597475922,124.24500151245978,124.24500151245978,139.79879302308217,138.61007602311318,137.422333283238,136.23562321558532,135.05000853352854,133.86555660103593,132.68233980880228,131.50043597815056,130.31992879336184,129.14090826262239,127.96347120713736,126.78772177710059,125.61377199208749,124.44174230199127,123.27176216278593,122.10397061911289,120.93851688286853,119.77556089356574,118.61527384219175,117.45783863556643,116.30345027283968,115.1523160998393,114.00465590068021,112.86070177969177,111.72069778079936,110.58489918670656,109.45357143747535,108.32698860853503,107.20543139306993,106.08918454451008,104.97853375272854,103.8737619533858,102.77514510378622,101.68294749966192,100.59741675312014,99.518778598687476,98.447231736671242,97.382942954772901,96.326042783896725,95.276621937485359,94.234728753004774,93.200367800292327,92.173499748967131,91.15404250378144,90.141873532416639,89.136833234742184,88.138729144289911,87.147340716978192,86.162424450610473,85.183719089537632,84.210950697603934,83.243837423111387,82.282093825793567,81.325434682163149,80.373578227881367,79.426248831321971,78.483179120037775,77.544111601315336,76.608799830159114,75.677009184067828,74.74851730521786,73.823114268481049,72.900602529253476,71.980796699322624,71.063523192689303,70.148619776917883,69.235935059564184,68.325327933738862,67.416667002007088,66.509829993638704,65.60470318668618,64.701180843433889,63.799164665369545,62.898563271904194,61.999291705546369,61.101270965048883,60.204427567138858,59.308693136758784,58.414004025245276,57.520300955516191,42.027913104131045],"text":["Ansiedad:  0.000000<br />Depresión:  49.77411","Ansiedad:  1.253165<br />Depresión:  50.81522","Ansiedad:  2.506329<br />Depresión:  51.85633","Ansiedad:  3.759494<br />Depresión:  52.89744","Ansiedad:  5.012658<br />Depresión:  53.93855","Ansiedad:  6.265823<br />Depresión:  54.97966","Ansiedad:  7.518987<br />Depresión:  56.02077","Ansiedad:  8.772152<br />Depresión:  57.06189","Ansiedad: 10.025316<br />Depresión:  58.10300","Ansiedad: 11.278481<br />Depresión:  59.14411","Ansiedad: 12.531646<br />Depresión:  60.18522","Ansiedad: 13.784810<br />Depresión:  61.22633","Ansiedad: 15.037975<br />Depresión:  62.26744","Ansiedad: 16.291139<br />Depresión:  63.30855","Ansiedad: 17.544304<br />Depresión:  64.34966","Ansiedad: 18.797468<br />Depresión:  65.39078","Ansiedad: 20.050633<br />Depresión:  66.43189","Ansiedad: 21.303797<br />Depresión:  67.47300","Ansiedad: 22.556962<br />Depresión:  68.51411","Ansiedad: 23.810127<br />Depresión:  69.55522","Ansiedad: 25.063291<br />Depresión:  70.59633","Ansiedad: 26.316456<br />Depresión:  71.63744","Ansiedad: 27.569620<br />Depresión:  72.67855","Ansiedad: 28.822785<br />Depresión:  73.71967","Ansiedad: 30.075949<br />Depresión:  74.76078","Ansiedad: 31.329114<br />Depresión:  75.80189","Ansiedad: 32.582278<br />Depresión:  76.84300","Ansiedad: 33.835443<br />Depresión:  77.88411","Ansiedad: 35.088608<br />Depresión:  78.92522","Ansiedad: 36.341772<br />Depresión:  79.96633","Ansiedad: 37.594937<br />Depresión:  81.00745","Ansiedad: 38.848101<br />Depresión:  82.04856","Ansiedad: 40.101266<br />Depresión:  83.08967","Ansiedad: 41.354430<br />Depresión:  84.13078","Ansiedad: 42.607595<br />Depresión:  85.17189","Ansiedad: 43.860759<br />Depresión:  86.21300","Ansiedad: 45.113924<br />Depresión:  87.25411","Ansiedad: 46.367089<br />Depresión:  88.29522","Ansiedad: 47.620253<br />Depresión:  89.33634","Ansiedad: 48.873418<br />Depresión:  90.37745","Ansiedad: 50.126582<br />Depresión:  91.41856","Ansiedad: 51.379747<br />Depresión:  92.45967","Ansiedad: 52.632911<br />Depresión:  93.50078","Ansiedad: 53.886076<br />Depresión:  94.54189","Ansiedad: 55.139241<br />Depresión:  95.58300","Ansiedad: 56.392405<br />Depresión:  96.62411","Ansiedad: 57.645570<br />Depresión:  97.66523","Ansiedad: 58.898734<br />Depresión:  98.70634","Ansiedad: 60.151899<br />Depresión:  99.74745","Ansiedad: 61.405063<br />Depresión: 100.78856","Ansiedad: 62.658228<br />Depresión: 101.82967","Ansiedad: 63.911392<br />Depresión: 102.87078","Ansiedad: 65.164557<br />Depresión: 103.91189","Ansiedad: 66.417722<br />Depresión: 104.95300","Ansiedad: 67.670886<br />Depresión: 105.99412","Ansiedad: 68.924051<br />Depresión: 107.03523","Ansiedad: 70.177215<br />Depresión: 108.07634","Ansiedad: 71.430380<br />Depresión: 109.11745","Ansiedad: 72.683544<br />Depresión: 110.15856","Ansiedad: 73.936709<br />Depresión: 111.19967","Ansiedad: 75.189873<br />Depresión: 112.24078","Ansiedad: 76.443038<br />Depresión: 113.28189","Ansiedad: 77.696203<br />Depresión: 114.32301","Ansiedad: 78.949367<br />Depresión: 115.36412","Ansiedad: 80.202532<br />Depresión: 116.40523","Ansiedad: 81.455696<br />Depresión: 117.44634","Ansiedad: 82.708861<br />Depresión: 118.48745","Ansiedad: 83.962025<br />Depresión: 119.52856","Ansiedad: 85.215190<br />Depresión: 120.56967","Ansiedad: 86.468354<br />Depresión: 121.61078","Ansiedad: 87.721519<br />Depresión: 122.65190","Ansiedad: 88.974684<br />Depresión: 123.69301","Ansiedad: 90.227848<br />Depresión: 124.73412","Ansiedad: 91.481013<br />Depresión: 125.77523","Ansiedad: 92.734177<br />Depresión: 126.81634","Ansiedad: 93.987342<br />Depresión: 127.85745","Ansiedad: 95.240506<br />Depresión: 128.89856","Ansiedad: 96.493671<br />Depresión: 129.93967","Ansiedad: 97.746835<br />Depresión: 130.98079","Ansiedad: 99.000000<br />Depresión: 132.02190","Ansiedad: 99.000000<br />Depresión: 132.02190","Ansiedad: 99.000000<br />Depresión: 132.02190","Ansiedad: 97.746835<br />Depresión: 130.98079","Ansiedad: 96.493671<br />Depresión: 129.93967","Ansiedad: 95.240506<br />Depresión: 128.89856","Ansiedad: 93.987342<br />Depresión: 127.85745","Ansiedad: 92.734177<br />Depresión: 126.81634","Ansiedad: 91.481013<br />Depresión: 125.77523","Ansiedad: 90.227848<br />Depresión: 124.73412","Ansiedad: 88.974684<br />Depresión: 123.69301","Ansiedad: 87.721519<br />Depresión: 122.65190","Ansiedad: 86.468354<br />Depresión: 121.61078","Ansiedad: 85.215190<br />Depresión: 120.56967","Ansiedad: 83.962025<br />Depresión: 119.52856","Ansiedad: 82.708861<br />Depresión: 118.48745","Ansiedad: 81.455696<br />Depresión: 117.44634","Ansiedad: 80.202532<br />Depresión: 116.40523","Ansiedad: 78.949367<br />Depresión: 115.36412","Ansiedad: 77.696203<br />Depresión: 114.32301","Ansiedad: 76.443038<br />Depresión: 113.28189","Ansiedad: 75.189873<br />Depresión: 112.24078","Ansiedad: 73.936709<br />Depresión: 111.19967","Ansiedad: 72.683544<br />Depresión: 110.15856","Ansiedad: 71.430380<br />Depresión: 109.11745","Ansiedad: 70.177215<br />Depresión: 108.07634","Ansiedad: 68.924051<br />Depresión: 107.03523","Ansiedad: 67.670886<br />Depresión: 105.99412","Ansiedad: 66.417722<br />Depresión: 104.95300","Ansiedad: 65.164557<br />Depresión: 103.91189","Ansiedad: 63.911392<br />Depresión: 102.87078","Ansiedad: 62.658228<br />Depresión: 101.82967","Ansiedad: 61.405063<br />Depresión: 100.78856","Ansiedad: 60.151899<br />Depresión:  99.74745","Ansiedad: 58.898734<br />Depresión:  98.70634","Ansiedad: 57.645570<br />Depresión:  97.66523","Ansiedad: 56.392405<br />Depresión:  96.62411","Ansiedad: 55.139241<br />Depresión:  95.58300","Ansiedad: 53.886076<br />Depresión:  94.54189","Ansiedad: 52.632911<br />Depresión:  93.50078","Ansiedad: 51.379747<br />Depresión:  92.45967","Ansiedad: 50.126582<br />Depresión:  91.41856","Ansiedad: 48.873418<br />Depresión:  90.37745","Ansiedad: 47.620253<br />Depresión:  89.33634","Ansiedad: 46.367089<br />Depresión:  88.29522","Ansiedad: 45.113924<br />Depresión:  87.25411","Ansiedad: 43.860759<br />Depresión:  86.21300","Ansiedad: 42.607595<br />Depresión:  85.17189","Ansiedad: 41.354430<br />Depresión:  84.13078","Ansiedad: 40.101266<br />Depresión:  83.08967","Ansiedad: 38.848101<br />Depresión:  82.04856","Ansiedad: 37.594937<br />Depresión:  81.00745","Ansiedad: 36.341772<br />Depresión:  79.96633","Ansiedad: 35.088608<br />Depresión:  78.92522","Ansiedad: 33.835443<br />Depresión:  77.88411","Ansiedad: 32.582278<br />Depresión:  76.84300","Ansiedad: 31.329114<br />Depresión:  75.80189","Ansiedad: 30.075949<br />Depresión:  74.76078","Ansiedad: 28.822785<br />Depresión:  73.71967","Ansiedad: 27.569620<br />Depresión:  72.67855","Ansiedad: 26.316456<br />Depresión:  71.63744","Ansiedad: 25.063291<br />Depresión:  70.59633","Ansiedad: 23.810127<br />Depresión:  69.55522","Ansiedad: 22.556962<br />Depresión:  68.51411","Ansiedad: 21.303797<br />Depresión:  67.47300","Ansiedad: 20.050633<br />Depresión:  66.43189","Ansiedad: 18.797468<br />Depresión:  65.39078","Ansiedad: 17.544304<br />Depresión:  64.34966","Ansiedad: 16.291139<br />Depresión:  63.30855","Ansiedad: 15.037975<br />Depresión:  62.26744","Ansiedad: 13.784810<br />Depresión:  61.22633","Ansiedad: 12.531646<br />Depresión:  60.18522","Ansiedad: 11.278481<br />Depresión:  59.14411","Ansiedad: 10.025316<br />Depresión:  58.10300","Ansiedad:  8.772152<br />Depresión:  57.06189","Ansiedad:  7.518987<br />Depresión:  56.02077","Ansiedad:  6.265823<br />Depresión:  54.97966","Ansiedad:  5.012658<br />Depresión:  53.93855","Ansiedad:  3.759494<br />Depresión:  52.89744","Ansiedad:  2.506329<br />Depresión:  51.85633","Ansiedad:  1.253165<br />Depresión:  50.81522","Ansiedad:  0.000000<br />Depresión:  49.77411","Ansiedad:  0.000000<br />Depresión:  49.77411"],"type":"scatter","mode":"lines","line":{"width":3.7795275590551185,"color":"transparent","dash":"solid"},"fill":"toself","fillcolor":"rgba(153,153,153,0.4)","hoveron":"points","hoverinfo":"x+y","showlegend":false,"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826491,"l":43.105022831050235},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Relación Lineal","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-4.9500000000000002,103.95],"tickmode":"array","ticktext":["0","25","50","75","100"],"tickvals":[0,25,50,75,100],"categoryorder":"array","categoryarray":["0","25","50","75","100"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Ansiedad","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f","showspikes":true},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[9.25,179.75],"tickmode":"array","ticktext":["50","100","150"],"tickvals":[50,100,150],"categoryorder":"array","categoryarray":["50","100","150"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Depresión","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f","showspikes":true},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"57442bc122e0":{"x":{},"y":{},"type":"scatter"},"57443ead273a":{"x":{},"y":{}}},"cur_data":"57442bc122e0","visdat":{"57442bc122e0":["function (y) ","x"],"57443ead273a":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Ahora que entiendes la lógica del gráfico de dispersión, es importante tener en cuenta la línea que se encuentra en medio. Esta línea representa la posible asociación lineal entre las variables de interés. Mas aún, pasa por lo que seria el medio de la nube de puntos, por lo que nos permite tener una descripción de la tendencia de ambas variables.</p>
+</section>
+<section id="actividad-1-interpretando-el-diagrama-de-dispersión" class="level2">
+<h2 class="anchored" data-anchor-id="actividad-1-interpretando-el-diagrama-de-dispersión">Actividad 1: Interpretando el diagrama de dispersión</h2>
+<p>Como se mencionó anteriormente, el coeficiente de correlación puede tomar valores entre -1 y 1. Así, te pedimos que uses el siguiente widget y respondas a las siguientes preguntas:</p>
+<ol type="1">
+<li>¿Que pasará si introduces valores entre 0 y 1 como coeficientes de correlación? ¿Cómo será la pendiente que forma la línea?</li>
+<li>¿Que pasara si introduces valores entre -1 y 0 como coeficientes de correlación? ¿Cómo será la pendiente que forma la línea?</li>
+<li>¿y si colocas el cero? ¿es una pendiente? ¿Por qué?</li>
+<li>Coloca los valores de 1 y -1, ¿que similitudes y diferencias hay entre estos dos tipos de correlación?</li>
+</ol>
+<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
+#| viewerHeight: 500
+library(shiny)
+library(ggplot2)
+library(tidyverse)
+
+set.seed(123)
+rn &lt;- sample(seq(-1, 1, by = .1), 1)
+
+# Define UI for app that draws a histogram ----
+ui &lt;- fluidPage(
+  numericInput("rc", "Coeficiente de correlación:", 
+  value = rn, min = -1, max = +1, step = .1),
+  plotOutput("dispPlot"))
+
+server &lt;- function(input, output, session) {
+
+  grf &lt;- function(rr) {
+  if (abs(rr) != 1) {
+    x1 &lt;- rnorm(100, 15, 5)
+    x2 &lt;- scale(matrix(rnorm(100), ncol= 1))
+    x12 &lt;- cbind(scale(x1),x2)
+    c1 &lt;- var(x12)
+    chol1 &lt;- solve(chol(c1))
+    newx &lt;-  x12 %*% chol1
+    zapsmall(cor(newx))
+    all.equal( x12[,1], newx[,1] )
+    newc &lt;- matrix( 
+      c(1, rr,
+        rr, 1), ncol = 2)
+    eigen(newc)
+    chol2 &lt;- chol(newc)
+    finalx &lt;- newx %*% chol2 * sd(x1) + mean(x1)}
+  
+  if (rr == -1) {
+    x1 &lt;- rnorm(100, 15, 5)
+    x2 &lt;- -x1
+    finalx &lt;- data.frame(x1, x2)
+  }
+  
+  if (rr == 1) {
+    x1 &lt;- rnorm(100, 15, 5)
+    x2 &lt;- x1
+    finalx &lt;- data.frame(x1, x2)
+  }
+  
+  finalx |&gt; 
+    data.frame() |&gt; 
+    as_tibble() |&gt; 
+    set_names(c("x", "y"))
+}
+
+output$dispPlot &lt;- renderPlot({
+  grf(input$rc) -&gt; cor_data
+  cor_data |&gt; 
+    ggplot(aes(x = x, y = y)) +
+    geom_point() +
+    geom_smooth(method = "lm", formula = "y ~ x") +
+    theme_minimal() +
+    scale_x_continuous(limits = c(5, 25),
+                       breaks = seq(5, 25, by = 5)) +
+    labs(title = NULL,
+         x = "Variable X", y = "Variable Y") -&gt; p
+  
+  input$rc == -1 -&gt; sol
+  
+  if(sol) {
+    p + scale_y_continuous(limits = c(-25, -5),
+                           breaks = seq(-5, -25, by = -5))
+  } else {
+    p + scale_y_continuous(limits = c(5, 25),
+                           breaks = seq(5, 25, by = 5))
+  }
+})
+}
+# Create Shiny app ----
+shinyApp(ui = ui, server = server)</code></pre>
+<p>Como puedes observar, la “pendiente” o caída de la recta va a ser diferente dependiendo del coeficiente de correlación que se tenga. En la <a href="#fig-corrs">Figure&nbsp;2</a> podrás ver una figura resumen sobre las correlaciones y las tendencias que puede tener la línea.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-corrs" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Análisis_de_la_Correlacion_files/figure-html/fig-corrs-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Diferentes valores de correlación</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>De este gráfico podemos extraer varias ideas:</p>
+<ol type="1">
+<li>el sentido de la pendiente indica si la relación es positiva o negativa. Si la pendiente es descendente ( \ ), estamos frente a una asociación negativa, caso contrario ( / ), la asociación sera directa o positiva.</li>
+<li>En las asociaciones con valor absoluto de 1 vemos que la línea pasa por absolutamente todos los puntos. Además, conforme la relación se reduzca en valor absoluto, la nube de puntos empieza a dispersarse mas de la línea central.</li>
+<li>Tradicionalmente, se entiende que las asociaciones de 1 y -1 son perfectas, de modo que X como Y son las mismas variables.</li>
+<li>En la asociación con <span class="math inline">\(r = 0\)</span> no se observa una tendencia de la nube de puntos. Aún más, la linea azul pasa a ser de una pendiente a un llano.</li>
+</ol>
+</section>
+<section id="actividad-2-adivina-la-correlación" class="level2">
+<h2 class="anchored" data-anchor-id="actividad-2-adivina-la-correlación">Actividad 2: Adivina la correlación</h2>
+<p>En base a lo revisado en el bloque anterior, estas listo para intentar identificar el coeficiente de correlación de los siguientes gráficos. Para ello, observa bien el diagrama de dispersión de puntos y propón un valor de coeficiente en el espacio demarcado. Te recomendamos que pienses en términos de “positivo y negativo” y de magnitud del coeficiente (pequeño, mediano o grande) para estimar un posible valor. Puedes intentar este ejercicio cuantas veces lo requieras.</p>
+<p>Ten en cuenta que esta mirada al gráfico es muy común en el análisis de datos, puesto que nos da una primera mirada sobre la posible asociación entre nuestras variables. Los gráficos de dispersión permiten a los grupos de investigación tener un primer vistazo de las asociaciones encontradas y pueden orientar a futuros análisis.</p>
+<p>Finalmente, en el siguiente apartado, aprenderás a estimar formalmente un coeficiente de correlación a partir de un conjunto de datos.</p>
+</section>
+<section id="pasos-para-estimar-una-correlación" class="level2">
+<h2 class="anchored" data-anchor-id="pasos-para-estimar-una-correlación">Pasos para estimar una correlación</h2>
+<ol type="1">
+<li>Plantear las hipótesis de trabajo (HT)</li>
+<li>Plantear las hipótesis estadísticas para cada HT</li>
+<li>Explorar la asociación con un diagrama de dispersión de puntos</li>
+<li>Evaluar la normalidad</li>
+<li>Realizar el análisis de correlación</li>
+<li>Brindar una respuesta o conclusión final</li>
+</ol>
+</section>
+<section id="ejemplo" class="level2">
+<h2 class="anchored" data-anchor-id="ejemplo">Ejemplo</h2>
+<p>Un grupo de estudiantes de la Facultad de Psicología, interesados en el trabajo de las Brigadas PUCP, planteó como objetivo general de su estudio, evaluar la relación que existe entre la resiliencia y la sintomatología de estrés post-traumático en un grupo de personas damnificadas por el terrorismo. Se espera que entre ambas variables se establezca una relación significativa. Dicho grupo te solicita que realices el análisis estadístico que pueda dar respuesta a su objetivo y que brindes tu conclusión en función a la hipótesis de trabajo.</p>
+<p><strong>Paso 0: cargar los datos</strong></p>
+<p>Si deseamos, podemos tener una visualización más elegante de la información. Para ello, abreviaremos a dos decimales todas las variables cuantitativas de la base y pediremos al paquete <code>DT</code> que nos genere una bonita tabla:</p>
+<p><strong>Paso 1: hipótesis de trabajo</strong></p>
+<p>HT: Existe relación entre los niveles de resiliencia (R) y la sintomatología de estrés post-traumático (S) de un grupo de personas damnificadas por el terrorismo.</p>
+<p><strong>Paso 2: hipótesis estadísticas</strong></p>
+<p><span class="math display">\[
+\displaylines{H_0:\rho_{RS} = 0 \\ H_1:\rho_{RS} \neq 0}
+\]</span></p>
+<p><strong>Paso 3: diagrama de dispersión</strong></p>
+<ol type="1">
+<li>Traemos la base donde se encuentran las variables de interés</li>
+<li>Definimos que variables tendremos en el eje “x” y en el eje “y”.</li>
+<li>Generamos la dispersión de puntos</li>
+<li>Colocamos la recta que nos puede ayudar a observar la tendencia y posible intensidad</li>
+<li>Señalamos que queremos un tema minimalista (paso opcional).</li>
+</ol>
+<p>A partir del diagrama de dispersión, se observa que puede existir una relación negativa y mediana entre la resiliencia y en el estrés post traumático.</p>
+<p><strong>Paso 4: evaluar la normalidad</strong></p>
+<p>A partir de la prueba de normalidad de Shapiro-Wilk, se observa que el PTSD, <span class="math inline">\(SW = .99, p = .59\)</span> y la resiliencia <span class="math inline">\(SW = .98, p = .253\)</span>, presentan una distribución normal de los datos. Por todo ello, se aplicará la correlación de Pearson.</p>
+<p><strong>Paso 5: análisis de la correlación</strong></p>
+<ol type="1">
+<li><p>Traemos los datos</p></li>
+<li><p>usamos la función cor_test para generar la correlación</p></li>
+<li><p>El método empleado fue el de Pearson, dada la normalidad</p></li>
+</ol>
+<p><strong>Conclusión:</strong> A partir del análisis de correlación de Pearson, se encontró una relación estadísticamente significativa, grande e inversa entre la resiliencia y el PTSD, <span class="math inline">\(r_{(98)} = -.54, p &lt; .001\)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Para construir la conclusión en el formato APA, tenemos que fijarnos en los siguientes 4 elementos:</p>
+<ol type="1">
+<li><p><strong>Significatividad:</strong> <u>Por medio de valor p, identificamos si el resultado es significativo (p &lt; .05).</u> En este caso, p es muy pequeño, incluso &lt; .001, por lo que es significativo.</p></li>
+<li><p><strong>Sentido:</strong> <u>El signo de la correlación (cor), nos indica si la relación es negativa o positiva.</u> En este caso, el signo negativo nos indica que la asociación es inversa.</p></li>
+<li><p><strong>Fuerza:</strong> <u>El valor absoluto de la correlación (cor) nos permite identificar, según el criterio de Cohen (1988), la magnitud de la asociación. Ver <a href="#tbl-cor">Table&nbsp;1</a>.</u> En este caso, la correlación es grande (r &gt; .5).</p></li>
+<li><p><strong>Grados de libertad:</strong> <u>N – 2, donde N es la cantidad de participantes.</u> En este caso, 100 - 2 = 98.</p></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="ejercicios" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicios">Ejercicios</h2>
+<p>Un grupo de estudiantes de la Facultad de Psicología, interesados en la problemática de salud mental en jóvenes ha planteado una investigación con el objetivo de evaluar las relaciones entre salud percibida, bienestar social, resiliencia, depresión y estrés en un grupo de estudiantes universitarios. Ellos solicitan tu apoyo para realizar el análisis de sus datos. Resuelve las siguientes preguntas, teniendo en consideración los pasos señalados en clase.</p>
+<p>1. Plantea las hipótesis de trabajo (HT) y las hipótesis estadísticas para cada HT.</p>
+<p>2. Explora el patrón de relación entre las variables con un diagrama de dispersión y brinda una interpretación del gráfico.</p>
+<p>3. Evalúa la normalidad de los datos e indica el coeficiente de correlación pertinente a utilizar.</p>
+<p>4. Analiza estadísticamente las hipótesis estadísticas (H0 y H1). Aplica la regla de decisión.</p>
+<p>5. Brindar respuesta a las hipótesis de trabajo</p>
+<p><strong>Utiliza el archivo de SPSS “Base – Ejercicios correlación”</strong></p>
+<ol type="1">
+<li>El grupo de investigadores quiere comprobar si existe una relación entre la salud percibida y el bienestar social. ¿Se puede comprobar dicha asociación? Brinda tu conclusión.</li>
+</ol>
+<ol start="2" type="1">
+<li>A partir de la revisión de la literatura, lxs investigadores esperan econtrar que la resiliencia se asocie negativamente con el estrés y la depresión. ¿Se comprueban las hipótesis? ¿La relación más fuerte se establece entre resiliencia y estrés? Brinda tu conclusión.</li>
+</ol>
+<ol start="3" type="1">
+<li>Por último, el grupo se plantea explorar si existe una relación entre la salud percibida y la depresión&nbsp; ¿Qué se puede concluir al respecto?</li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
